@@ -29,6 +29,12 @@ jobs:
           xcodebuild -version
           swift --version
 
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Plyne.xcodeproj
+        run: xcodegen generate
+
       - name: Resolve packages
         run: |
           xcodebuild -resolvePackageDependencies \
@@ -54,8 +60,10 @@ jobs:
           mkdir -p build/export
           cp -R build/Plyne.xcarchive/Products/Applications/Plyne.app build/export/Plyne.app
           # Re-sign ad-hoc so the bundle is internally consistent after copy.
-          codesign --force --deep --sign - build/export/Plyne.app
-          codesign --verify --deep --strict --verbose=2 build/export/Plyne.app || true
+          # --deep is deprecated since macOS 11; signing the top-level bundle
+          # is sufficient for an app with no embedded helpers yet.
+          codesign --force --sign - build/export/Plyne.app
+          codesign --verify --strict --verbose=2 build/export/Plyne.app || true
 
       - name: Package as zip
         run: |

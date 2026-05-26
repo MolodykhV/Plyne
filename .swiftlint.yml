@@ -1,0 +1,74 @@
+# SwiftLint config for Plyne.
+# Conservative on the first pass — we will tighten as the codebase grows.
+
+included:
+  - App
+  - Packages/PlyneCore/Sources
+  - Packages/PlyneCore/Tests
+  - Packages/PlyneAnalytics/Sources
+  - Packages/PlyneAnalytics/Tests
+  - Packages/PlyneStorage/Sources
+  - Packages/PlyneStorage/Tests
+
+excluded:
+  - .build
+  - DerivedData
+  - build
+  - .swiftpm
+  - Plyne.xcodeproj
+
+disabled_rules:
+  - todo  # research-backed TODOs land in code intentionally; tracked in the implementation plan
+
+opt_in_rules:
+  - empty_count
+  - empty_string
+  - first_where
+  - last_where
+  - sorted_first_last
+  - contains_over_first_not_nil
+  - redundant_nil_coalescing
+  - closure_end_indentation
+  - closure_spacing
+  - explicit_init
+  - prefer_zero_over_explicit_init
+  - prohibited_super_call
+  - vertical_parameter_alignment_on_call
+  - yoda_condition
+  - force_unwrapping
+  - implicit_return
+  - missing_docs
+  # missing_docs is opt_in, but enforced softly (warning) for public API only.
+
+line_length:
+  warning: 140
+  error: 200
+  ignores_comments: true
+  ignores_urls: true
+
+identifier_name:
+  excluded:
+    - id
+    - x
+    - y
+
+file_length:
+  warning: 400
+  error: 800
+
+type_body_length:
+  warning: 300
+  error: 500
+
+function_body_length:
+  warning: 60
+  error: 120
+
+cyclomatic_complexity:
+  warning: 12
+  error: 20
+
+force_unwrapping:
+  severity: warning
+
+reporter: "xcode"

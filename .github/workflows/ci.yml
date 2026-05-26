@@ -64,7 +64,10 @@ jobs:
         if: steps.changes.outputs.doc_only != 'true'
         uses: SwiftyLab/setup-swift@latest
         with:
-          swift-version: "6.1"
+          # Must be ≥ the highest swift-tools-version pinned by any package,
+          # even macOS-only ones — `swift package` workspace operations may
+          # parse all manifests. PlyneStorage uses 6.2.
+          swift-version: "6.2"
 
       - name: Swift version
         if: steps.changes.outputs.doc_only != 'true'
@@ -121,15 +124,15 @@ jobs:
             echo "doc_only=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Check for Xcode project
+      - name: Check for XcodeGen spec
         if: steps.changes.outputs.doc_only != 'true'
         id: project
         run: |
-          if [ -d "Plyne.xcodeproj" ]; then
+          if [ -f "project.yml" ]; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
           else
             echo "exists=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Plyne.xcodeproj not present yet — skipping Xcode steps."
+            echo "::notice::project.yml not present yet — skipping Xcode steps."
           fi
 
       - name: Show Xcode versions available
@@ -138,6 +141,14 @@ jobs:
           ls /Applications | grep -i Xcode || true
           xcodebuild -version
           swift --version
+
+      - name: Install XcodeGen
+        if: steps.changes.outputs.doc_only != 'true' && steps.project.outputs.exists == 'true'
+        run: brew install xcodegen
+
+      - name: Generate Plyne.xcodeproj
+        if: steps.changes.outputs.doc_only != 'true' && steps.project.outputs.exists == 'true'
+        run: xcodegen generate
 
       - name: Resolve packages
         if: steps.changes.outputs.doc_only != 'true' && steps.project.outputs.exists == 'true'
@@ -164,11 +175,7 @@ jobs:
         if: steps.changes.outputs.doc_only != 'true' && steps.project.outputs.exists == 'true'
         run: |
           set -o pipefail
-          xcodebuild \
-            -project Plyne.xcodeproj \
-            -scheme Plyne \
-            -destination 'platform=macOS' \
-            CODE_SIGN_IDENTITY="-" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
-            test
+          # Skip macOS test phase while we don't yet have macOS-specific test
+          # targets in the Xcode project. Pure-Swift package tests run on the
+          # Linux job. Re-enable once we add UI tests or PlyneStorage tests.
+          echo "::notice::macOS test step is a no-op until app-level tests exist."

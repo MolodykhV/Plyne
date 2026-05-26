@@ -1,0 +1,99 @@
+name: Release
+
+# Builds the macOS app on a Tahoe runner, zips it, and attaches the artifact to
+# the GitHub Release for the pushed tag. Triggered only by `v*` tags on main.
+#
+# Code signing: ad-hoc only for now. We do NOT have an Apple Developer ID yet,
+# so release notes must instruct users to clear the quarantine attribute on
+# first launch:  xattr -dr com.apple.quarantine /Applications/Plyne.app
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write  # needed to attach assets to the release
+
+jobs:
+  build:
+    name: Build & publish (macOS 26)
+    runs-on: macos-26
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show Xcode versions available
+        run: |
+          ls /Applications | grep -i Xcode || true
+          xcodebuild -version
+          swift --version
+
+      - name: Resolve packages
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project Plyne.xcodeproj \
+            -scheme Plyne
+
+      - name: Archive (Release)
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project Plyne.xcodeproj \
+            -scheme Plyne \
+            -configuration Release \
+            -destination 'generic/platform=macOS' \
+            -archivePath build/Plyne.xcarchive \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            archive
+
+      - name: Export .app from archive
+        run: |
+          mkdir -p build/export
+          cp -R build/Plyne.xcarchive/Products/Applications/Plyne.app build/export/Plyne.app
+          # Re-sign ad-hoc so the bundle is internally consistent after copy.
+          codesign --force --deep --sign - build/export/Plyne.app
+          codesign --verify --deep --strict --verbose=2 build/export/Plyne.app || true
+
+      - name: Package as zip
+        run: |
+          cd build/export
+          /usr/bin/ditto -c -k --sequesterRsrc --keepParent Plyne.app "Plyne-${GITHUB_REF_NAME}.zip"
+          shasum -a 256 "Plyne-${GITHUB_REF_NAME}.zip" | tee "Plyne-${GITHUB_REF_NAME}.zip.sha256"
+
+      - name: Upload artifact (for inspection)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Plyne-${{ github.ref_name }}
+          path: |
+            build/export/Plyne-${{ github.ref_name }}.zip
+            build/export/Plyne-${{ github.ref_name }}.zip.sha256
+
+      - name: Create / update GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          draft: true
+          generate_release_notes: true
+          files: |
+            build/export/Plyne-${{ github.ref_name }}.zip
+            build/export/Plyne-${{ github.ref_name }}.zip.sha256
+          body: |
+            ## Installation
+
+            1. Download `Plyne-${{ github.ref_name }}.zip`.
+            2. Unzip and move `Plyne.app` to `/Applications`.
+            3. The build is currently ad-hoc signed (no Apple Developer ID yet),
+               so on first launch macOS will block it as "unidentified developer".
+               To allow it:
+
+               ```bash
+               xattr -dr com.apple.quarantine /Applications/Plyne.app
+               open /Applications/Plyne.app
+               ```
+
+            4. Grant permissions as the onboarding asks (Calendar; later: Accessibility for the activity watcher).
+
+            Notarization will be added in a later release.

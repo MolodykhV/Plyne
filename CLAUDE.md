@@ -10,6 +10,26 @@ The full product concept is in [.scratch/PLYNE_CONCEPT.md](.scratch/PLYNE_CONCEP
 
 The active implementation roadmap is in [.scratch/IMPLEMENTATION_PLAN.md](.scratch/IMPLEMENTATION_PLAN.md). Keep it in sync with reality.
 
+### Using `.scratch/` as session-handoff memory
+
+`.scratch/` is gitignored on purpose — it is the local **knowledge base for this project**, owned by the human + assistant working pair, not the public repo. **Use it actively.** Anything that would otherwise be lost between sessions belongs here:
+
+- product concept, implementation plan, open questions
+- research notes (e.g. "what we learned about EventKit access on Tahoe")
+- API/framework cheat-sheets we accumulated while debugging
+- decisions and their *why* (so we don't re-litigate them next session)
+- design sketches, copy drafts, UX considerations
+- vendor docs, screenshots, icon variants we are evaluating
+
+Conventions:
+
+1. **Read `.scratch/` at the start of every session.** At minimum: `ls .scratch/` and skim the implementation plan. Pick up unread research files relevant to the task.
+2. **Before writing a non-trivial answer or starting a step, check whether prior notes already cover it.** Don't re-derive.
+3. **Write findings down** — if you learned something this session that future-you would want, drop a Markdown file in `.scratch/research/`, `.scratch/decisions/`, or `.scratch/notes/`. Subfolders are flexible; just keep filenames descriptive (`eventkit-permissions-tahoe.md`, not `notes.md`).
+4. **Decisions in `.scratch/decisions/`** are append-only, ADR-style: title, date, context, decision, consequences. Don't rewrite history — supersede with a new file.
+5. **`.scratch/` is never pushed.** If something matures into public-facing documentation, move it to `docs/` and commit deliberately.
+6. **Update the implementation plan in place** when steps complete or scope shifts.
+
 ## Operating rules (non-negotiable)
 
 1. **No AI attribution anywhere in the repo.** No mentions of Claude, Claude Code, AI authorship, "Co-Authored-By: Claude", "Generated with Claude Code", or similar in commits, PR titles/bodies, comments, READMEs, or release notes. Commits and PRs go out under the human author's git identity only.
@@ -53,7 +73,7 @@ Plyne/
 │   └── workflows/
 │       ├── ci.yml               # PR + push to dev/main
 │       └── release.yml          # tagged release builds
-├── .scratch/                    # gitignored — concept doc, plan, scratch artifacts
+├── .scratch/                    # gitignored — knowledge base (concept, plan, research, decisions, sketches)
 ├── CLAUDE.md                    # this file
 ├── README.md
 └── LICENSE                      # MIT

@@ -62,7 +62,7 @@ fastlane/screenshots/**/*.png
 fastlane/test_output
 
 # Local working notes (concept doc, plan, scratch artifacts)
-.scratch
+.scratch/
 
 # macOS metadata
 .DS_Store
@@ -75,3 +75,6 @@ DerivedData/
 # Swift Package Manager
 .swiftpm/
 Package.resolved
+
+# Generated from project.yml by XcodeGen — never commit
+Plyne.xcodeproj/

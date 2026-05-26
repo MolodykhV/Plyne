@@ -60,3 +60,18 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# Local working notes (concept doc, plan, scratch artifacts)
+.scratch
+
+# macOS metadata
+.DS_Store
+**/.DS_Store
+
+# Xcode build output
+build/
+DerivedData/
+
+# Swift Package Manager
+.swiftpm/
+Package.resolved

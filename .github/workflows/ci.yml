@@ -1,0 +1,174 @@
+name: CI
+
+# Two jobs run in parallel:
+#   - `linux-core` lints and tests the pure-Swift packages on a cheap Ubuntu runner.
+#   - `macos-app`  builds and tests the full Xcode project on a macOS 26 (Tahoe) runner.
+#
+# CI economy: each job auto-skips its work for doc-only changes by diffing the touched
+# paths. We don't use workflow-level `paths-ignore` so that required status checks
+# still resolve to "skipped success" rather than "missing" on doc-only PRs.
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Lint + pure-Swift package tests. Runs on Linux — nothing here needs Mac.
+  # ─────────────────────────────────────────────────────────────────────────────
+  linux-core:
+    name: Lint & core tests (Linux)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # need history for doc-only diff detection
+
+      - name: Detect doc-only change
+        id: changes
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+          else
+            BASE="${{ github.event.before }}"
+            HEAD="${{ github.event.after }}"
+          fi
+          if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ]; then
+            echo "doc_only=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          CHANGED=$(git diff --name-only "$BASE" "$HEAD" || true)
+          echo "Changed files:"
+          echo "$CHANGED"
+          NON_DOC=$(echo "$CHANGED" | grep -Ev '(^|/)([^/]+\.md$|\.scratch/|LICENSE$|\.gitignore$|docs/)' || true)
+          if [ -z "$NON_DOC" ] && [ -n "$CHANGED" ]; then
+            echo "doc_only=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "doc_only=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up Swift
+        if: steps.changes.outputs.doc_only != 'true'
+        uses: SwiftyLab/setup-swift@latest
+        with:
+          swift-version: "6.1"
+
+      - name: Swift version
+        if: steps.changes.outputs.doc_only != 'true'
+        run: swift --version
+
+      - name: Test PlyneCore
+        if: steps.changes.outputs.doc_only != 'true' && hashFiles('Packages/PlyneCore/Package.swift') != ''
+        working-directory: Packages/PlyneCore
+        run: swift test --parallel
+
+      - name: Test PlyneAnalytics
+        if: steps.changes.outputs.doc_only != 'true' && hashFiles('Packages/PlyneAnalytics/Package.swift') != ''
+        working-directory: Packages/PlyneAnalytics
+        run: swift test --parallel
+
+      - name: SwiftLint
+        if: steps.changes.outputs.doc_only != 'true' && hashFiles('.swiftlint.yml') != ''
+        uses: norio-nomura/action-swiftlint@3.2.1
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Full Xcode build on macOS 26 (Tahoe). Required for shipping artifacts.
+  # ─────────────────────────────────────────────────────────────────────────────
+  macos-app:
+    name: Build & test app (macOS 26)
+    runs-on: macos-26
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect doc-only change
+        id: changes
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+          else
+            BASE="${{ github.event.before }}"
+            HEAD="${{ github.event.after }}"
+          fi
+          if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ]; then
+            echo "doc_only=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          CHANGED=$(git diff --name-only "$BASE" "$HEAD" || true)
+          echo "Changed files:"
+          echo "$CHANGED"
+          NON_DOC=$(echo "$CHANGED" | grep -Ev '(^|/)([^/]+\.md$|\.scratch/|LICENSE$|\.gitignore$|docs/)' || true)
+          if [ -z "$NON_DOC" ] && [ -n "$CHANGED" ]; then
+            echo "doc_only=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "doc_only=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check for Xcode project
+        if: steps.changes.outputs.doc_only != 'true'
+        id: project
+        run: |
+          if [ -d "Plyne.xcodeproj" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Plyne.xcodeproj not present yet — skipping Xcode steps."
+          fi
+
+      - name: Show Xcode versions available
+        if: steps.changes.outputs.doc_only != 'true' && steps.project.outputs.exists == 'true'
+        run: |
+          ls /Applications | grep -i Xcode || true
+          xcodebuild -version
+          swift --version
+
+      - name: Resolve packages
+        if: steps.changes.outputs.doc_only != 'true' && steps.project.outputs.exists == 'true'
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project Plyne.xcodeproj \
+            -scheme Plyne
+
+      - name: Build (Debug)
+        if: steps.changes.outputs.doc_only != 'true' && steps.project.outputs.exists == 'true'
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project Plyne.xcodeproj \
+            -scheme Plyne \
+            -configuration Debug \
+            -destination 'platform=macOS' \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Test
+        if: steps.changes.outputs.doc_only != 'true' && steps.project.outputs.exists == 'true'
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project Plyne.xcodeproj \
+            -scheme Plyne \
+            -destination 'platform=macOS' \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            test

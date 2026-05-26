@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+    Plyne is intentionally NOT sandboxed. App Store distribution is off the
+    table (we need Accessibility and Apple Events access for the activity
+    watcher in Phase 2) and the concept doc explicitly chooses GitHub Releases
+    + Homebrew Cask as the distribution channel. Do not add
+    com.apple.security.app-sandbox here unless that distribution decision
+    changes — adding it later will break the watcher silently.
+
+    Entitlements stay empty until a feature genuinely needs one (e.g. a
+    hardened-runtime exception when notarization is wired up).
+-->
+<plist version="1.0">
+<dict>
+</dict>
+</plist>

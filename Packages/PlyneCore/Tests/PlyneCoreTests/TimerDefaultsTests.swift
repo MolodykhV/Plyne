@@ -41,4 +41,19 @@ struct TimerDefaultsTests {
         // 9 s of work → 9 / 5 = 1.8 → floors to 1 s.
         #expect(Flowmodoro.recommendedBreak(after: 9) == 1)
     }
+
+    @Test
+    func overflowBoundsMatchConcept() {
+        // Concept doc: "ещё 5–15 минут поверх таймера".
+        #expect(Overflow.minMinutes == 5)
+        #expect(Overflow.maxMinutes == 15)
+        #expect((Overflow.minMinutes...Overflow.maxMinutes).contains(Overflow.defaultMinutes))
+    }
+
+    @Test
+    func overflowClampingHoldsTheRange() {
+        #expect(Overflow.clampedMinutes(1) == 5)
+        #expect(Overflow.clampedMinutes(60) == 15)
+        #expect(Overflow.clampedMinutes(10) == 10)
+    }
 }

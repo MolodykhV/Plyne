@@ -54,6 +54,8 @@ settings:
 packages:
   PlyneCore:
     path: Packages/PlyneCore
+  PlyneTimer:
+    path: Packages/PlyneTimer
   PlyneAnalytics:
     path: Packages/PlyneAnalytics
   PlyneStorage:
@@ -82,6 +84,8 @@ targets:
     dependencies:
       - package: PlyneCore
         product: PlyneCore
+      - package: PlyneTimer
+        product: PlyneTimer
       - package: PlyneAnalytics
         product: PlyneAnalytics
       - package: PlyneStorage

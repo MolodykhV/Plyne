@@ -78,6 +78,11 @@ jobs:
         working-directory: Packages/PlyneCore
         run: swift test --parallel
 
+      - name: Test PlyneTimer
+        if: steps.changes.outputs.doc_only != 'true' && hashFiles('Packages/PlyneTimer/Package.swift') != ''
+        working-directory: Packages/PlyneTimer
+        run: swift test --parallel
+
       - name: Test PlyneAnalytics
         if: steps.changes.outputs.doc_only != 'true' && hashFiles('Packages/PlyneAnalytics/Package.swift') != ''
         working-directory: Packages/PlyneAnalytics

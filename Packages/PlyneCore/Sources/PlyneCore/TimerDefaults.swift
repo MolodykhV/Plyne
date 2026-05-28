@@ -10,6 +10,25 @@ public enum Pomodoro {
     public static let defaultBreakMinutes: Int = 5
 }
 
+/// Bounds for the optional overflow phase offered after the main work
+/// phase ends. Per the concept doc, overflow is "ещё 5–15 минут поверх
+/// таймера, если человек в потоке" — a soft extension, never forced.
+public enum Overflow {
+    /// Shortest overflow extension, in minutes.
+    public static let minMinutes: Int = 5
+
+    /// Longest overflow extension, in minutes.
+    public static let maxMinutes: Int = 15
+
+    /// Default extension offered in the UI, in minutes.
+    public static let defaultMinutes: Int = 10
+
+    /// Clamps a requested overflow length into the allowed range.
+    public static func clampedMinutes(_ requested: Int) -> Int {
+        min(max(requested, minMinutes), maxMinutes)
+    }
+}
+
 /// Helpers describing Plyne's Flowmodoro break rule.
 public enum Flowmodoro {
     /// Hard cap on the recommended break length, in seconds (30 minutes).

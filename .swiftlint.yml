@@ -5,6 +5,8 @@ included:
   - App
   - Packages/PlyneCore/Sources
   - Packages/PlyneCore/Tests
+  - Packages/PlyneTimer/Sources
+  - Packages/PlyneTimer/Tests
   - Packages/PlyneAnalytics/Sources
   - Packages/PlyneAnalytics/Tests
   - Packages/PlyneStorage/Sources

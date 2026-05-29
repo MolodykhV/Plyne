@@ -118,16 +118,18 @@ struct SwiftDataRepositoryTests {
     }
 
     @Test
-    func recentIntentionsAreDeduplicatedAndOrderedByRecency() async throws {
+    func intentionStatsAreDeduplicatedWithUseCountAndRecency() async throws {
         let repo = try makeRepository()
         try await repo.recordIntention("Refactor auth", at: day)
         try await repo.recordIntention("Write docs", at: day.addingTimeInterval(60))
-        // Re-using the first intention later makes it the most recent.
+        // Re-using the first intention later bumps its count and recency.
         try await repo.recordIntention("Refactor auth", at: day.addingTimeInterval(120))
 
-        let suggestions = try await repo.recentIntentions(limit: 10)
-        #expect(suggestions.map(\.text) == ["Refactor auth", "Write docs"])
-        #expect(suggestions.allSatisfy { $0.source == .history })
+        let stats = try await repo.recentIntentionStats(limit: 10)
+        #expect(stats.map(\.text) == ["Refactor auth", "Write docs"])
+        let refactor = try #require(stats.first)
+        #expect(refactor.useCount == 2)
+        #expect(refactor.lastUsedAt == day.addingTimeInterval(120))
     }
 
     @Test
@@ -136,20 +138,20 @@ struct SwiftDataRepositoryTests {
         try await repo.recordIntention("   ", at: day)
         try await repo.recordIntention("  Plan the week  ", at: day)
 
-        let suggestions = try await repo.recentIntentions(limit: 10)
-        #expect(suggestions.map(\.text) == ["Plan the week"])
+        let stats = try await repo.recentIntentionStats(limit: 10)
+        #expect(stats.map(\.text) == ["Plan the week"])
     }
 
     @Test
-    func recentIntentionsRespectsLimit() async throws {
+    func recentIntentionStatsRespectLimit() async throws {
         let repo = try makeRepository()
         for index in 0..<5 {
             try await repo.recordIntention("intention \(index)", at: day.addingTimeInterval(TimeInterval(index)))
         }
-        let suggestions = try await repo.recentIntentions(limit: 3)
-        #expect(suggestions.count == 3)
+        let stats = try await repo.recentIntentionStats(limit: 3)
+        #expect(stats.count == 3)
         // Most recent first.
-        #expect(suggestions.first?.text == "intention 4")
+        #expect(stats.first?.text == "intention 4")
     }
 
     @Test

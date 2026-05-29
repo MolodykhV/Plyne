@@ -3,8 +3,8 @@ import SwiftData
 import PlyneCore
 
 /// SwiftData persistence record tracking an intention's recency and use
-/// count, the raw material the pre-session prompt's suggestions are ranked
-/// from (ranking itself lands in step 1.6).
+/// count. `toStat()` feeds these signals to `IntentionRanker` (in PlyneCore),
+/// which ranks the pre-session prompt's suggestions.
 @Model
 final class IntentionEntry {
     @Attribute(.unique) var text: String
@@ -19,7 +19,7 @@ final class IntentionEntry {
 }
 
 extension IntentionEntry {
-    func toSuggestion() -> IntentionSuggestion {
-        IntentionSuggestion(text: text, source: .history)
+    func toStat() -> IntentionStat {
+        IntentionStat(text: text, useCount: useCount, lastUsedAt: lastUsedAt)
     }
 }

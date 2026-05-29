@@ -121,13 +121,13 @@ public actor SwiftDataRepository: SessionRepository {
         try modelContext.save()
     }
 
-    public func recentIntentions(limit: Int) async throws -> [IntentionSuggestion] {
+    public func recentIntentionStats(limit: Int) async throws -> [IntentionStat] {
         guard limit > 0 else { return [] }
         var descriptor = FetchDescriptor<IntentionEntry>(
             sortBy: [SortDescriptor(\.lastUsedAt, order: .reverse)]
         )
         descriptor.fetchLimit = limit
-        return try modelContext.fetch(descriptor).map { $0.toSuggestion() }
+        return try modelContext.fetch(descriptor).map { $0.toStat() }
     }
 
     // MARK: - Helpers

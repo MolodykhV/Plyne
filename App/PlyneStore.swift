@@ -31,12 +31,34 @@ final class PlyneStore {
     var draftMode: PickerMode = .pomodoro
 
     /// Draft intention text for the idle screen's field.
-    var draftIntention: String = ""
+    var draftIntention: String = "" {
+        didSet { refreshSuggestions() }
+    }
+
+    /// Suggestions for the idle prompt, ranked against `draftIntention`.
+    /// Recomputed from the in-memory history window — no per-keystroke fetch.
+    private(set) var suggestions: [IntentionSuggestion] = []
+
+    /// How many suggestions the prompt shows at once.
+    static let suggestionLimit = 6
+
+    /// Whether the draft holds anything once trimmed. Drives the optional
+    /// "start without naming a focus" escape hatch, which only makes sense
+    /// when there is typed text to ignore.
+    var hasDraftIntention: Bool {
+        !draftIntention.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
 
     private let repository: any SessionRepository
     private let now: @Sendable () -> Date
     private var tickTask: Task<Void, Never>?
     private var autoResetTask: Task<Void, Never>?
+
+    /// The recent history window, loaded once per idle visit and ranked
+    /// locally on each keystroke. Larger than the display limit so filtering
+    /// by the draft still has candidates to surface.
+    private var intentionHistory: [IntentionStat] = []
+    private static let historyWindow = 50
 
     init(repository: any SessionRepository, now: @Sendable @escaping () -> Date = Date.init) {
         self.repository = repository
@@ -65,6 +87,33 @@ final class PlyneStore {
         dispatch(.start(now: now()))
     }
 
+    /// Starts with no intention, ignoring whatever is in the draft. The
+    /// prompt is optional by design — naming a task is never an obligation.
+    func startWithoutIntention() {
+        draftIntention = ""
+        dispatch(.prepare(mode: draftMode.sessionMode, intention: nil))
+        dispatch(.start(now: now()))
+    }
+
+    /// Fills the draft from a chosen suggestion (does not start — the user
+    /// can still edit, then start). Re-ranks against the new text.
+    func applySuggestion(_ suggestion: IntentionSuggestion) {
+        draftIntention = suggestion.text
+    }
+
+    /// Loads the recent intention history for the idle prompt. Called when
+    /// the idle pane appears; cheap and idempotent.
+    func loadIntentionHistory() {
+        Task { [repository] in
+            let window = Self.historyWindow
+            let stats = (try? await repository.recentIntentionStats(limit: window)) ?? []
+            await MainActor.run {
+                self.intentionHistory = stats
+                self.refreshSuggestions()
+            }
+        }
+    }
+
     /// Ends the in-flight session (running / mainEnded / overflow).
     func end() { dispatch(.end(now: now())) }
 
@@ -90,6 +139,16 @@ final class PlyneStore {
 
     /// Clears the current notice.
     func dismissNotice() { notice = nil }
+
+    /// Re-ranks the in-memory history against the current draft.
+    private func refreshSuggestions() {
+        suggestions = IntentionRanker.rank(
+            intentionHistory,
+            query: draftIntention,
+            now: now(),
+            limit: Self.suggestionLimit
+        )
+    }
 
     // MARK: - Side effects, keyed off the transition
 

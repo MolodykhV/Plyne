@@ -117,6 +117,33 @@ final class PlyneStore {
     /// Ends the in-flight session (running / mainEnded / overflow).
     func end() { dispatch(.end(now: now())) }
 
+    /// One-key start/stop for the global hotkey: ends an in-flight session,
+    /// otherwise starts one. From a terminal summary it resets to idle first
+    /// (no draft to preserve there) so the next press starts cleanly; from
+    /// idle it preserves any intention typed in the popover.
+    func toggleSession() {
+        switch state {
+        case .running, .mainEnded, .overflow:
+            end()
+        case .finished, .abandoned:
+            reset()
+            start()
+        case .idle:
+            start()
+        case .preparing:
+            // Already prepared (mode + intention chosen); start that payload
+            // directly. Routing through start() would re-dispatch .prepare,
+            // which is a no-op from .preparing, so it must not be relied on.
+            dispatch(.start(now: now()))
+        }
+    }
+
+    /// Flips the idle picker between Pomodoro and Flowmodoro. Mode is chosen
+    /// before a session starts, so this takes effect on the next start.
+    func toggleDraftMode() {
+        draftMode = draftMode == .pomodoro ? .flowmodoro : .pomodoro
+    }
+
     /// Extends a main-ended Pomodoro into an overflow window.
     func keepGoing(minutes: Int = Overflow.defaultMinutes) {
         dispatch(.beginOverflow(now: now(), minutes: Overflow.clampedMinutes(minutes)))

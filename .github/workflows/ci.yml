@@ -180,5 +180,8 @@ jobs:
         if: steps.changes.outputs.doc_only != 'true' && hashFiles('Packages/PlyneStorage/Package.swift') != ''
         working-directory: Packages/PlyneStorage
         # SwiftData needs Apple frameworks, so this package can't run on the
-        # Linux job — its tests run here against an in-memory store.
-        run: swift test --parallel
+        # Linux job — its tests run here against an in-memory store. Run them
+        # serially (no --parallel): spinning up many in-memory ModelContainers
+        # concurrently crashes SwiftData on the runner's Xcode (signal 11), and
+        # the suite finishes in well under a second serially anyway.
+        run: swift test

@@ -3,7 +3,13 @@ import Testing
 import PlyneCore
 @testable import PlyneStorage
 
-@Suite("SwiftDataRepository")
+// `.serialized`: each test builds its own in-memory ModelContainer, and
+// creating many concurrently intermittently crashes SwiftData on some
+// toolchains (signal 11, reproduced ~4% per run on Xcode 26.4.1; 0/25 when
+// serial). Serializing the suite removes the concurrent-container stress.
+// This is a test-harness concern only — the app creates a single container
+// at launch (PlyneApp.makeStore), never many at once.
+@Suite("SwiftDataRepository", .serialized)
 struct SwiftDataRepositoryTests {
     private let day = Date(timeIntervalSince1970: 1_700_000_000)
 

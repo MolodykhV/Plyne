@@ -140,18 +140,15 @@ jobs:
             echo "::notice::project.yml not present yet — skipping Xcode steps."
           fi
 
-      - name: Select Xcode
+      - name: Show Xcode versions available
         if: steps.changes.outputs.doc_only != 'true' && steps.project.outputs.exists == 'true'
-        # Pin the toolchain instead of riding the runner's shifting default
-        # (it moved to 26.4.1 in May 2026). 26.5 is the version the project is
-        # developed and validated against; the default 26.4.1's swift-testing
-        # runtime crashes SwiftData tests (signal 11). Falls back to the
-        # default if 26.5 is ever dropped from the image.
+        # Intentionally NOT pinning a specific Xcode: building/testing on the
+        # runner's default (currently 26.4.1, SDK below our local 26.5) keeps
+        # CI honest about what older toolchains/SDKs do, which is exactly how
+        # the SwiftData parallel-container flake surfaced. The fix for that
+        # lives in the test suite (.serialized), not in masking the toolchain.
         run: |
           ls /Applications | grep -i Xcode || true
-          if [ -d /Applications/Xcode_26.5.app ]; then
-            sudo xcode-select -s /Applications/Xcode_26.5.app/Contents/Developer
-          fi
           xcodebuild -version
           swift --version
 
@@ -188,8 +185,8 @@ jobs:
         if: steps.changes.outputs.doc_only != 'true' && hashFiles('Packages/PlyneStorage/Package.swift') != ''
         working-directory: Packages/PlyneStorage
         # SwiftData needs Apple frameworks, so this package can't run on the
-        # Linux job — its tests run here against an in-memory store. Run them
-        # serially (no --parallel): spinning up many in-memory ModelContainers
-        # concurrently crashes SwiftData on the runner's Xcode (signal 11), and
-        # the suite finishes in well under a second serially anyway.
+        # Linux job — its tests run here against an in-memory store. The suite
+        # is marked .serialized in code (creating many in-memory containers
+        # concurrently intermittently crashes SwiftData on some toolchains), so
+        # plain `swift test` is correct here.
         run: swift test

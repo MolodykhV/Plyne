@@ -140,10 +140,18 @@ jobs:
             echo "::notice::project.yml not present yet — skipping Xcode steps."
           fi
 
-      - name: Show Xcode versions available
+      - name: Select Xcode
         if: steps.changes.outputs.doc_only != 'true' && steps.project.outputs.exists == 'true'
+        # Pin the toolchain instead of riding the runner's shifting default
+        # (it moved to 26.4.1 in May 2026). 26.5 is the version the project is
+        # developed and validated against; the default 26.4.1's swift-testing
+        # runtime crashes SwiftData tests (signal 11). Falls back to the
+        # default if 26.5 is ever dropped from the image.
         run: |
           ls /Applications | grep -i Xcode || true
+          if [ -d /Applications/Xcode_26.5.app ]; then
+            sudo xcode-select -s /Applications/Xcode_26.5.app/Contents/Developer
+          fi
           xcodebuild -version
           swift --version
 

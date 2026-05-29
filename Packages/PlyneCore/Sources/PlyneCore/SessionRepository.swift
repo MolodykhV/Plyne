@@ -29,6 +29,8 @@ public protocol SessionRepository: Sendable {
     /// recency and use count. Blank text is ignored.
     func recordIntention(_ text: String, at date: Date) async throws
 
-    /// The most recently used intentions, most recent first, capped at `limit`.
-    func recentIntentions(limit: Int) async throws -> [IntentionSuggestion]
+    /// A recent window of intention stats (most-recently-used first, capped at
+    /// `limit`) for ``IntentionRanker`` to score. Storage stays a raw data
+    /// source — ranking is pure and lives in the caller, which owns the clock.
+    func recentIntentionStats(limit: Int) async throws -> [IntentionStat]
 }

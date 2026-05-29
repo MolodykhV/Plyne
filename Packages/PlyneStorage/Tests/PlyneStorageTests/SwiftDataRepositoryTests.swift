@@ -1,5 +1,4 @@
 import Foundation
-import SwiftData
 import Testing
 import PlyneCore
 @testable import PlyneStorage
@@ -118,16 +117,18 @@ struct SwiftDataRepositoryTests {
     }
 
     @Test
-    func recentIntentionsAreDeduplicatedAndOrderedByRecency() async throws {
+    func intentionStatsAreDeduplicatedWithUseCountAndRecency() async throws {
         let repo = try makeRepository()
         try await repo.recordIntention("Refactor auth", at: day)
         try await repo.recordIntention("Write docs", at: day.addingTimeInterval(60))
-        // Re-using the first intention later makes it the most recent.
+        // Re-using the first intention later bumps its count and recency.
         try await repo.recordIntention("Refactor auth", at: day.addingTimeInterval(120))
 
-        let suggestions = try await repo.recentIntentions(limit: 10)
-        #expect(suggestions.map(\.text) == ["Refactor auth", "Write docs"])
-        #expect(suggestions.allSatisfy { $0.source == .history })
+        let stats = try await repo.recentIntentionStats(limit: 10)
+        #expect(stats.map(\.text) == ["Refactor auth", "Write docs"])
+        let refactor = try #require(stats.first)
+        #expect(refactor.useCount == 2)
+        #expect(refactor.lastUsedAt == day.addingTimeInterval(120))
     }
 
     @Test
@@ -136,45 +137,44 @@ struct SwiftDataRepositoryTests {
         try await repo.recordIntention("   ", at: day)
         try await repo.recordIntention("  Plan the week  ", at: day)
 
-        let suggestions = try await repo.recentIntentions(limit: 10)
-        #expect(suggestions.map(\.text) == ["Plan the week"])
+        let stats = try await repo.recentIntentionStats(limit: 10)
+        #expect(stats.map(\.text) == ["Plan the week"])
     }
 
     @Test
-    func recentIntentionsRespectsLimit() async throws {
+    func recentIntentionStatsRespectLimit() async throws {
         let repo = try makeRepository()
         for index in 0..<5 {
             try await repo.recordIntention("intention \(index)", at: day.addingTimeInterval(TimeInterval(index)))
         }
-        let suggestions = try await repo.recentIntentions(limit: 3)
-        #expect(suggestions.count == 3)
+        let stats = try await repo.recentIntentionStats(limit: 3)
+        #expect(stats.count == 3)
         // Most recent first.
-        #expect(suggestions.first?.text == "intention 4")
+        #expect(stats.first?.text == "intention 4")
     }
 
     @Test
     func readPathSkipsRowsThatFailValidation() async throws {
-        // Inject an invalid row (ended before it started) directly, bypassing
-        // save()'s validation, then confirm the read path drops it.
-        let container = try SwiftDataRepository.makeContainer(inMemory: true)
-        let repo = SwiftDataRepository(modelContainer: container)
-
-        let context = ModelContext(container)
-        let valid = SessionRecord(
-            Session(startedAt: day, endedAt: day.addingTimeInterval(600), mode: .flowmodoro, endReason: .completed)
-        )
-        let invalid = SessionRecord(
-            id: UUID(),
+        // Plant a valid and an invalid row (the latter reversed: ended before
+        // it started) through the repository's own context, bypassing save()'s
+        // validation, then confirm the read path drops the invalid one.
+        let repo = try makeRepository()
+        let valid = Session(
             startedAt: day,
-            endedAt: day.addingTimeInterval(-600), // reversed interval
-            modeData: SessionModeCoding.encode(.flowmodoro),
-            intention: nil,
-            categoryHint: nil,
+            endedAt: day.addingTimeInterval(600),
+            mode: .flowmodoro,
             endReason: .completed
         )
-        context.insert(valid)
-        context.insert(invalid)
-        try context.save()
+        // Build the invalid value via the unvalidated memberwise initializer
+        // (save() would reject it); the timer/UI can never produce this.
+        let invalid = Session(
+            startedAt: day,
+            endedAt: day.addingTimeInterval(-600),
+            mode: .flowmodoro,
+            endReason: .completed
+        )
+        try await repo.insertUncheckedForTesting(valid)
+        try await repo.insertUncheckedForTesting(invalid)
 
         let fetched = try await repo.sessions(in: wholeDayInterval())
         #expect(fetched.count == 1)

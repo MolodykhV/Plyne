@@ -121,13 +121,13 @@ public actor SwiftDataRepository: SessionRepository {
         try modelContext.save()
     }
 
-    public func recentIntentions(limit: Int) async throws -> [IntentionSuggestion] {
+    public func recentIntentionStats(limit: Int) async throws -> [IntentionStat] {
         guard limit > 0 else { return [] }
         var descriptor = FetchDescriptor<IntentionEntry>(
             sortBy: [SortDescriptor(\.lastUsedAt, order: .reverse)]
         )
         descriptor.fetchLimit = limit
-        return try modelContext.fetch(descriptor).map { $0.toSuggestion() }
+        return try modelContext.fetch(descriptor).map { $0.toStat() }
     }
 
     // MARK: - Helpers
@@ -140,4 +140,15 @@ public actor SwiftDataRepository: SessionRepository {
         guard (try? session.validate()) != nil else { return nil }
         return session
     }
+
+    #if DEBUG
+    /// Test support: inserts a session row WITHOUT validation, so tests can
+    /// plant a corrupt/invalid row (e.g. a reversed interval) and assert the
+    /// read path skips it. Goes through the actor's own context, so there is
+    /// never a second `ModelContext` racing the same container.
+    func insertUncheckedForTesting(_ session: Session) throws {
+        modelContext.insert(SessionRecord(session))
+        try modelContext.save()
+    }
+    #endif
 }

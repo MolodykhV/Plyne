@@ -48,6 +48,7 @@ struct TimerPopover: View {
 
 private struct IdlePane: View {
     @Environment(PlyneStore.self) private var store
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @FocusState private var intentionFocused: Bool
 
     var body: some View {
@@ -66,13 +67,65 @@ private struct IdlePane: View {
                 .focused($intentionFocused)
                 .onSubmit { store.start() }
 
+            if !store.suggestions.isEmpty {
+                SuggestionList(suggestions: store.suggestions) { suggestion in
+                    store.applySuggestion(suggestion)
+                    // The tapped row is dropped from the re-ranked list (it now
+                    // equals the draft), so its element is torn out; return
+                    // focus to the field for keyboard/VoiceOver users.
+                    DispatchQueue.main.async { intentionFocused = true }
+                }
+            }
+
             PrimaryButton("action.start") { store.start() }
                 .frame(maxWidth: .infinity)
+
+            // Only meaningful when there is typed text to ignore; otherwise the
+            // primary Start already begins with no focus, so showing it would
+            // just duplicate that button.
+            if store.hasDraftIntention {
+                Button("action.start_without_intention") { store.startWithoutIntention() }
+                    .buttonStyle(.plain)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity)
+            }
         }
+        // Smooth the popover's resize as suggestions filter in and out while
+        // typing, per the concept's calm-motion rule; off under Reduce Motion.
+        .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: store.suggestions)
+        .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: store.hasDraftIntention)
         .onAppear {
+            store.loadIntentionHistory()
             // The popover window may not be key on open, so defer focus a
             // runloop turn. Typing may still require a first click on Tahoe.
             DispatchQueue.main.async { intentionFocused = true }
+        }
+    }
+}
+
+/// A short, tappable list of recent intentions. Selecting one fills the field
+/// (the user can still edit before starting). Plain rows on the content layer
+/// — no glass, no decoration — to keep the prompt calm.
+private struct SuggestionList: View {
+    let suggestions: [IntentionSuggestion]
+    let onSelect: (IntentionSuggestion) -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            ForEach(suggestions, id: \.text) { suggestion in
+                Button { onSelect(suggestion) } label: {
+                    Text(suggestion.text)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .font(.callout)
+                .foregroundStyle(.secondary)
+                .accessibilityHint(Text("a11y.suggestion.hint"))
+            }
         }
     }
 }

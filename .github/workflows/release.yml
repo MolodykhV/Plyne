@@ -23,9 +23,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Show Xcode versions available
+      - name: Select Xcode
+        # Pin to the toolchain the project is validated against rather than the
+        # runner's shifting default (see ci.yml for the rationale).
         run: |
           ls /Applications | grep -i Xcode || true
+          if [ -d /Applications/Xcode_26.5.app ]; then
+            sudo xcode-select -s /Applications/Xcode_26.5.app/Contents/Developer
+          fi
           xcodebuild -version
           swift --version
 

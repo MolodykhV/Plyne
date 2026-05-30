@@ -50,10 +50,22 @@ private struct IdlePane: View {
     @Environment(PlyneStore.self) private var store
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @FocusState private var intentionFocused: Bool
+    @State private var addingPastSession = false
 
     var body: some View {
+        Group {
+            if addingPastSession {
+                RetroactiveEntryPane { addingPastSession = false }
+            } else {
+                startContent
+            }
+        }
+        .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: addingPastSession)
+    }
+
+    private var startContent: some View {
         @Bindable var store = store
-        VStack(alignment: .leading, spacing: 12) {
+        return VStack(alignment: .leading, spacing: 12) {
             Picker("mode.picker.label", selection: $store.draftMode) {
                 Text("mode.pomodoro").tag(PickerMode.pomodoro)
                 Text("mode.flowmodoro").tag(PickerMode.flowmodoro)
@@ -90,6 +102,14 @@ private struct IdlePane: View {
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity)
             }
+
+            Divider()
+
+            Button("retro.add") { addingPastSession = true }
+                .buttonStyle(.plain)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
         // Smooth the popover's resize as suggestions filter in and out while
         // typing, per the concept's calm-motion rule; off under Reduce Motion.
@@ -271,55 +291,5 @@ private struct Footer: View {
             .buttonStyle(.plain)
             .keyboardShortcut("q")
             .frame(maxWidth: .infinity, alignment: .leading)
-    }
-}
-
-// MARK: - Glass-aware action buttons
-
-/// A prominent primary action. Uses Liquid Glass on the control layer, falling
-/// back to a solid prominent button when the user has reduced transparency or
-/// increased contrast (translucency they have opted out of).
-private struct PrimaryButton: View {
-    let titleKey: LocalizedStringKey
-    let action: () -> Void
-    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
-    @Environment(\.colorSchemeContrast) private var contrast
-
-    init(_ titleKey: LocalizedStringKey, action: @escaping () -> Void) {
-        self.titleKey = titleKey
-        self.action = action
-    }
-
-    private var solid: Bool { reduceTransparency || contrast == .increased }
-
-    var body: some View {
-        if solid {
-            Button(titleKey, action: action).buttonStyle(.borderedProminent)
-        } else {
-            Button(titleKey, action: action).buttonStyle(.glassProminent)
-        }
-    }
-}
-
-/// A secondary action; glass when available, bordered otherwise.
-private struct SecondaryButton: View {
-    let titleKey: LocalizedStringKey
-    let action: () -> Void
-    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
-    @Environment(\.colorSchemeContrast) private var contrast
-
-    init(_ titleKey: LocalizedStringKey, action: @escaping () -> Void) {
-        self.titleKey = titleKey
-        self.action = action
-    }
-
-    private var solid: Bool { reduceTransparency || contrast == .increased }
-
-    var body: some View {
-        if solid {
-            Button(titleKey, action: action).buttonStyle(.bordered)
-        } else {
-            Button(titleKey, action: action).buttonStyle(.glass)
-        }
     }
 }

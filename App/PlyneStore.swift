@@ -63,6 +63,11 @@ final class PlyneStore {
     /// timer suggestion.
     var meetingNow: CalendarBlock? { MeetingNow.active(in: todaysBlocks, at: displayNow) }
 
+    /// Set by the app delegate to open the dashboard window — invoked from the
+    /// popover button (the global hotkey calls the window controller directly).
+    /// `@ObservationIgnored`: it's an action hook, not rendered state.
+    @ObservationIgnored var openDashboard: (() -> Void)?
+
     private let repository: any SessionRepository
     private let calendar: any CalendarReading
     private let now: @Sendable () -> Date

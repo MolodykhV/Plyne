@@ -116,11 +116,14 @@ private struct IdlePane: View {
 
             Divider()
 
-            Button("retro.add") { addingPastSession = true }
-                .buttonStyle(.plain)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            HStack {
+                Button("retro.add") { addingPastSession = true }
+                Spacer(minLength: 8)
+                Button("dashboard.open") { store.openDashboard?() }
+            }
+            .buttonStyle(.plain)
+            .font(.footnote)
+            .foregroundStyle(.secondary)
         }
         // Smooth the popover's resize as suggestions filter in and out while
         // typing, per the concept's calm-motion rule; off under Reduce Motion.

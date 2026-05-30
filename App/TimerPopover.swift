@@ -65,7 +65,16 @@ private struct IdlePane: View {
 
     private var startContent: some View {
         @Bindable var store = store
+        let inMeeting = store.meetingNow != nil
         return VStack(alignment: .leading, spacing: 12) {
+            // A meeting is on: state it plainly and offer manual start — never
+            // block (concept: respect for autonomy).
+            if inMeeting {
+                Text("calendar.meeting_now.title")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
+
             Picker("mode.picker.label", selection: $store.draftMode) {
                 Text("mode.pomodoro").tag(PickerMode.pomodoro)
                 Text("mode.flowmodoro").tag(PickerMode.flowmodoro)
@@ -89,7 +98,7 @@ private struct IdlePane: View {
                 }
             }
 
-            PrimaryButton("action.start") { store.start() }
+            PrimaryButton(inMeeting ? "calendar.meeting_now.start" : "action.start") { store.start() }
                 .frame(maxWidth: .infinity)
 
             // Only meaningful when there is typed text to ignore; otherwise the
@@ -103,6 +112,8 @@ private struct IdlePane: View {
                     .frame(maxWidth: .infinity)
             }
 
+            CalendarConnectRow()
+
             Divider()
 
             Button("retro.add") { addingPastSession = true }
@@ -115,6 +126,7 @@ private struct IdlePane: View {
         // typing, per the concept's calm-motion rule; off under Reduce Motion.
         .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: store.suggestions)
         .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: store.hasDraftIntention)
+        .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: inMeeting)
         .onAppear {
             store.loadIntentionHistory()
             // The popover window may not be key on open, so defer focus a

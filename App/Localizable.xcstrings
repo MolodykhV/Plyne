@@ -172,6 +172,61 @@
         }
       }
     },
+    "calendar.connect" : {
+      "comment" : "Idle-screen opt-in to read the calendar (read-only).",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Connect calendar" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Подключить календарь" } }
+      }
+    },
+    "calendar.connect.rationale" : {
+      "comment" : "One-line factual rationale shown under the Connect button.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Plyne reads only today's events so it won't suggest a timer during a meeting. This stays on your device." } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Plyne читает только сегодняшние события, чтобы не предлагать таймер во время встречи. Данные остаются на устройстве." } }
+      }
+    },
+    "calendar.denied" : {
+      "comment" : "Calm note when calendar access was declined.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Calendar access is off. You can turn it on in System Settings." } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Доступ к календарю выключен. Можно включить в Системных настройках." } }
+      }
+    },
+    "calendar.denied.open_settings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Open Settings" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Открыть настройки" } }
+      }
+    },
+    "calendar.restricted" : {
+      "comment" : "Calendar access blocked by policy (MDM/parental) and unchangeable by the user.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Calendar access isn't available on this device." } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Доступ к календарю недоступен на этом устройстве." } }
+      }
+    },
+    "calendar.meeting_now.title" : {
+      "comment" : "Neutral note shown on the idle screen while a meeting is happening now.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "A meeting is on now — no timer suggested." } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Сейчас встреча — таймер не предлагается." } }
+      }
+    },
+    "calendar.meeting_now.start" : {
+      "comment" : "Manual-start action offered during a meeting (never blocked).",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Start anyway" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Запустить вручную" } }
+      }
+    },
     "action.done" : {
       "extractionState" : "manual",
       "localizations" : {

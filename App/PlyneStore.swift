@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import PlyneCalendar
 import PlyneCore
 import PlyneTimer
 
@@ -49,10 +50,26 @@ final class PlyneStore {
         !draftIntention.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
+    /// Calendar read access, as Plyne sees it. Drives the idle screen's
+    /// connect affordance vs the during-meeting hint. `.notDetermined` until
+    /// the first status read completes.
+    private(set) var calendarAuthorization: CalendarAuthorization = .notDetermined
+
+    /// Today's calendar blocks, refreshed every few minutes while authorized.
+    private(set) var todaysBlocks: [CalendarBlock] = []
+
+    /// The meeting active right now, if any. Computed against `displayNow`, so
+    /// it stays fresh as the tick advances — only a `.meeting` suppresses the
+    /// timer suggestion.
+    var meetingNow: CalendarBlock? { MeetingNow.active(in: todaysBlocks, at: displayNow) }
+
     private let repository: any SessionRepository
+    private let calendar: any CalendarReading
     private let now: @Sendable () -> Date
     private var tickTask: Task<Void, Never>?
     private var autoResetTask: Task<Void, Never>?
+    private var calendarTask: Task<Void, Never>?
+    private static let calendarRefreshSeconds: UInt64 = 300
 
     /// The recent history window, loaded once per idle visit and ranked
     /// locally on each keystroke. Larger than the display limit so filtering
@@ -60,10 +77,23 @@ final class PlyneStore {
     private var intentionHistory: [IntentionStat] = []
     private static let historyWindow = 50
 
-    init(repository: any SessionRepository, now: @Sendable @escaping () -> Date = Date.init) {
+    init(
+        repository: any SessionRepository,
+        calendar: any CalendarReading = EventKitCalendarReader(),
+        now: @Sendable @escaping () -> Date = Date.init
+    ) {
         self.repository = repository
+        self.calendar = calendar
         self.now = now
         self.displayNow = now()
+        // Read current access WITHOUT prompting; if already granted in a prior
+        // session, begin polling. The opt-in prompt is only `connectCalendar()`.
+        Task { [weak self] in
+            guard let self else { return }
+            let status = await self.calendar.authorizationStatus()
+            self.calendarAuthorization = status
+            if status == .authorized { self.startCalendarPolling() }
+        }
     }
 
     // MARK: - Single entry point
@@ -224,6 +254,50 @@ final class PlyneStore {
     /// Clears the current notice.
     func dismissNotice() { notice = nil }
 
+    // MARK: - Calendar (read-only, explicit opt-in)
+
+    /// Requests calendar access — only from the explicit "Connect calendar"
+    /// action, never at launch. On grant, begins the refresh poll.
+    func connectCalendar() {
+        Task { [weak self] in
+            guard let self else { return }
+            let status = await self.calendar.requestAccess()
+            self.calendarAuthorization = status
+            if status == .authorized { self.startCalendarPolling() }
+        }
+    }
+
+    private func startCalendarPolling() {
+        guard calendarTask == nil else { return }
+        calendarTask = Task { [weak self] in
+            while !Task.isCancelled {
+                // `self` is acquired only for the refresh, then released before
+                // the long sleep, so the store isn't pinned alive for a whole
+                // interval after the UI drops it. A `nil` self (store gone) or a
+                // `false` return (access lost) ends the loop.
+                guard let keepPolling = await self?.refreshCalendarOnce(), keepPolling else { return }
+                try? await Task.sleep(for: .seconds(Double(Self.calendarRefreshSeconds)))
+            }
+        }
+    }
+
+    /// One calendar refresh. Re-reads authorization (so a mid-run revoke in
+    /// System Settings is noticed): on loss it clears today's blocks, drops the
+    /// poll task so a later ``connectCalendar()`` can re-arm it, and returns
+    /// `false` to stop. Otherwise refreshes ``todaysBlocks`` and returns `true`.
+    private func refreshCalendarOnce() async -> Bool {
+        let status = await calendar.authorizationStatus()
+        calendarAuthorization = status
+        guard status == .authorized else {
+            todaysBlocks = []
+            calendarTask = nil
+            return false
+        }
+        let events = await calendar.todaysEvents(now: now())
+        todaysBlocks = CalendarBlockMapper.blocks(from: events)
+        return true
+    }
+
     /// Re-ranks the in-memory history against the current draft.
     private func refreshSuggestions() {
         suggestions = IntentionRanker.rank(
@@ -305,46 +379,8 @@ final class PlyneStore {
         }
     }
 
-    // No deinit cleanup is needed: both owned tasks capture `self` weakly and
-    // exit on their next wake (within ~1s) once the store deallocates.
-}
-
-/// The two modes offered in the idle picker. A plain `Hashable` enum without
-/// associated values so a SwiftUI `Picker` can tag it; mapped to the domain
-/// ``SessionMode`` with the configured defaults at start time.
-enum PickerMode: CaseIterable, Identifiable {
-    case pomodoro
-    case flowmodoro
-
-    var id: Self { self }
-
-    var sessionMode: SessionMode {
-        switch self {
-        case .pomodoro:
-            return .pomodoro(workMinutes: Pomodoro.defaultWorkMinutes, breakMinutes: Pomodoro.defaultBreakMinutes)
-        case .flowmodoro:
-            return .flowmodoro
-        }
-    }
-}
-
-/// The result of attempting to add a retroactive session.
-enum RetroactiveOutcome: Equatable {
-    /// Saved.
-    case added
-    /// Not saved: the interval overlaps `count` existing session(s). The view
-    /// may re-submit with `force: true` to record it anyway.
-    case overlap(count: Int)
-    /// Not saved: the inputs were invalid (e.g. non-positive duration).
-    case invalid
-    /// Not saved: persistence failed (a calm notice has been surfaced).
-    case notSaved
-}
-
-private extension String {
-    /// The trimmed string, or `nil` if it is empty once trimmed.
-    var trimmedNonEmpty: String? {
-        let trimmed = trimmingCharacters(in: .whitespacesAndNewlines)
-        return trimmed.isEmpty ? nil : trimmed
-    }
+    // No deinit cleanup is needed: every owned task (tick, auto-reset, and the
+    // calendar poll) captures `self` weakly and holds no strong reference across
+    // its sleep, so the store deallocates promptly; each orphaned task then ends
+    // on its next wake when it finds `self` gone.
 }

@@ -31,6 +31,8 @@
     <string>$(MACOSX_DEPLOYMENT_TARGET)</string>
     <key>LSUIElement</key>
     <true/>
+    <key>NSCalendarsFullAccessUsageDescription</key>
+    <string>Plyne reads your calendar events for today so it won't suggest a timer during a meeting. Your calendar data is never sent anywhere and stays on this Mac.</string>
     <key>NSHumanReadableCopyright</key>
     <string>© 2026 MolodykhV. MIT License.</string>
 </dict>

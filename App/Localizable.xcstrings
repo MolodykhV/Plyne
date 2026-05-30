@@ -131,6 +131,13 @@
         }
       }
     },
+    "action.cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Cancel" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Отмена" } }
+      }
+    },
     "action.discard" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -287,6 +294,61 @@
             "value" : "Использовать этот фокус"
           }
         }
+      }
+    },
+    "retro.add" : {
+      "comment" : "Idle-screen entry point to record a session that already happened.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add a past session" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Добавить прошедшую сессию" } }
+      }
+    },
+    "retro.title" : {
+      "comment" : "Header of the retroactive-entry form.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add a past session" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Прошедшая сессия" } }
+      }
+    },
+    "retro.when" : {
+      "comment" : "Label for the start date/time picker in the retroactive form.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Started" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Начало" } }
+      }
+    },
+    "retro.duration %lld" : {
+      "comment" : "Duration stepper label in the retroactive form. %lld is minutes (abbreviated unit; plural agreement deferred to the localization audit).",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld min" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "%lld мин" } }
+      }
+    },
+    "retro.overlap" : {
+      "comment" : "Calm, non-blocking warning when a retroactive session overlaps already-recorded time.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "This overlaps time you've already recorded." } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Это пересекается с уже записанным временем." } }
+      }
+    },
+    "retro.save" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Добавить" } }
+      }
+    },
+    "retro.save_anyway" : {
+      "comment" : "Confirm adding the session despite an overlap warning.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add anyway" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Всё равно добавить" } }
       }
     },
     "intention.placeholder" : {

@@ -149,6 +149,63 @@ final class PlyneStore {
         dispatch(.beginOverflow(now: now(), minutes: Overflow.clampedMinutes(minutes)))
     }
 
+    // MARK: - Retroactive entry (a session added after the fact)
+
+    /// Adds a session that already happened. Independent of the live FSM —
+    /// the timer's state is untouched.
+    ///
+    /// Overlap with existing sessions is a *warning*, not an error (concept:
+    /// respect for autonomy): the first call that would overlap returns
+    /// `.overlap` without saving; call again with `force: true` to record it
+    /// anyway. Invalid inputs (non-positive duration, reversed interval)
+    /// return `.invalid`.
+    func addRetroactiveSession(
+        startedAt: Date,
+        durationMinutes: Int,
+        mode: PickerMode,
+        intention: String?,
+        force: Bool = false
+    ) async -> RetroactiveOutcome {
+        guard durationMinutes > 0 else { return .invalid }
+        let endedAt = startedAt.addingTimeInterval(TimeInterval(durationMinutes) * 60)
+        let trimmed = intention?.trimmedNonEmpty
+
+        let session: Session
+        do {
+            session = try FocusTimer.retroactiveSession(
+                startedAt: startedAt,
+                endedAt: endedAt,
+                mode: mode.sessionMode,
+                intention: trimmed
+            )
+        } catch {
+            return .invalid
+        }
+
+        if !force {
+            // Query a window wide enough to catch a session that began before
+            // the candidate but runs into it. A day's lead covers any
+            // realistic focus session; the pure overlap check is exact, and a
+            // missed warning only means no prompt — the save is still correct.
+            let window = DateInterval(
+                start: startedAt.addingTimeInterval(-86_400),
+                end: endedAt.addingTimeInterval(60)
+            )
+            let existing = (try? await repository.sessions(in: window)) ?? []
+            let overlaps = SessionOverlap.overlapping(start: startedAt, end: endedAt, in: existing)
+            if !overlaps.isEmpty { return .overlap(count: overlaps.count) }
+        }
+
+        do {
+            try await repository.save(session)
+            if let trimmed { try? await repository.recordIntention(trimmed, at: startedAt) }
+            return .added
+        } catch {
+            notice = .couldNotSave
+            return .notSaved
+        }
+    }
+
     /// Throws the in-flight session away without recording it, then returns
     /// to idle. The reducer's `.discard` lands in the terminal `.abandoned`
     /// state, which the UI never rests in — `reset()` immediately moves it
@@ -269,6 +326,19 @@ enum PickerMode: CaseIterable, Identifiable {
             return .flowmodoro
         }
     }
+}
+
+/// The result of attempting to add a retroactive session.
+enum RetroactiveOutcome: Equatable {
+    /// Saved.
+    case added
+    /// Not saved: the interval overlaps `count` existing session(s). The view
+    /// may re-submit with `force: true` to record it anyway.
+    case overlap(count: Int)
+    /// Not saved: the inputs were invalid (e.g. non-positive duration).
+    case invalid
+    /// Not saved: persistence failed (a calm notice has been surfaced).
+    case notSaved
 }
 
 private extension String {

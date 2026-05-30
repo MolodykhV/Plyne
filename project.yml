@@ -60,6 +60,8 @@ packages:
     path: Packages/PlyneAnalytics
   PlyneStorage:
     path: Packages/PlyneStorage
+  PlyneCalendar:
+    path: Packages/PlyneCalendar
 
 targets:
   Plyne:
@@ -90,3 +92,5 @@ targets:
         product: PlyneAnalytics
       - package: PlyneStorage
         product: PlyneStorage
+      - package: PlyneCalendar
+        product: PlyneCalendar

@@ -15,6 +15,7 @@ struct HotkeyBinding: Equatable, Sendable {
 enum HotkeyAction: CaseIterable {
     case toggleSession
     case toggleMode
+    case openDashboard
 
     /// `⌃⌥⌘` — an uncommon chord, low collision risk, and (via Carbon's
     /// `RegisterEventHotKey`) requires no Accessibility permission.
@@ -25,6 +26,8 @@ enum HotkeyAction: CaseIterable {
             return HotkeyBinding(keyCode: UInt32(kVK_ANSI_P), carbonModifiers: modifiers)
         case .toggleMode:
             return HotkeyBinding(keyCode: UInt32(kVK_ANSI_M), carbonModifiers: modifiers)
+        case .openDashboard:
+            return HotkeyBinding(keyCode: UInt32(kVK_ANSI_D), carbonModifiers: modifiers)
         }
     }
 }

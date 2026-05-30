@@ -406,6 +406,116 @@
         "ru" : { "stringUnit" : { "state" : "translated", "value" : "Всё равно добавить" } }
       }
     },
+    "dashboard.open" : {
+      "comment" : "Popover button that opens the overview window.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Overview" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Обзор" } }
+      }
+    },
+    "dashboard.window.title" : {
+      "comment" : "Title of the overview window.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Overview" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Обзор" } }
+      }
+    },
+    "dashboard.section.week" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "This week" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "На этой неделе" } }
+      }
+    },
+    "dashboard.section.today" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Today" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Сегодня" } }
+      }
+    },
+    "dashboard.day.previous" : {
+      "comment" : "VoiceOver label for the previous-day button.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Previous day" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Предыдущий день" } }
+      }
+    },
+    "dashboard.day.next" : {
+      "comment" : "VoiceOver label for the next-day button.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Next day" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Следующий день" } }
+      }
+    },
+    "heatmap.title" : {
+      "comment" : "Accessibility label / heading for the week heatmap.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "This week, focus by hour" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "На этой неделе — фокус по часам" } }
+      }
+    },
+    "heatmap.row.summary %@ %@" : {
+      "comment" : "VoiceOver summary for one weekday row. %1 is the weekday, %2 is a list of hours with focus.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%1$@: focus at %2$@." } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "%1$@: фокус в %2$@." } }
+      }
+    },
+    "heatmap.row.empty %@" : {
+      "comment" : "VoiceOver summary for a weekday with no focus. %@ is the weekday.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%@: no focus recorded." } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "%@: фокуса не записано." } }
+      }
+    },
+    "timeline.empty" : {
+      "comment" : "Calm empty-state for a day with no sessions or events.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Nothing recorded for this day." } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "За этот день ничего не записано." } }
+      }
+    },
+    "timeline.session.untitled" : {
+      "comment" : "Title for a focus session with no intention.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Focus session" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Сессия фокуса" } }
+      }
+    },
+    "timeline.kind.session" : {
+      "comment" : "VoiceOver cue identifying a timeline row as a focus session.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Focus session" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Сессия фокуса" } }
+      }
+    },
+    "timeline.kind.calendar" : {
+      "comment" : "VoiceOver cue identifying a timeline row as a calendar event.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Calendar event" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Событие календаря" } }
+      }
+    },
+    "timeline.session.inProgress" : {
+      "comment" : "Subtitle for the currently-running session.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "In progress" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Идёт сейчас" } }
+      }
+    },
     "intention.placeholder" : {
       "comment" : "Placeholder in the pre-session intention field.",
       "extractionState" : "manual",

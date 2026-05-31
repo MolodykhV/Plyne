@@ -11,6 +11,10 @@ struct DashboardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             weekSection
+            if let focusWindow = model.focusWindow {
+                Divider()
+                InsightCardsView(focusWindow: focusWindow)
+            }
             Divider()
             daySection
         }

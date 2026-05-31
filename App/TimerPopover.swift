@@ -239,7 +239,7 @@ private struct FinishedPane: View {
     let session: Session
 
     private var summary: LocalizedStringKey {
-        let minutes = DurationFormatting.wholeMinutes(session.duration ?? 0)
+        let minutes = DurationFormatting.minutesPhrase(session.duration ?? 0)
         if let intention = session.intention, !intention.isEmpty {
             return "session.summary.intention \(minutes) \(intention)"
         }

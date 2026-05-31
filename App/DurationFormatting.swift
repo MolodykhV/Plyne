@@ -29,4 +29,13 @@ enum DurationFormatting {
     static func wholeMinutes(_ interval: TimeInterval) -> Int {
         Int((max(interval, 0) / 60).rounded())
     }
+
+    /// Whole minutes as a wide, localized, plural-correct phrase ("25 minutes" /
+    /// "25 минут" / "1 минута"). Foundation's unit formatting handles per-locale
+    /// plural agreement, so the post-session summary can read as prose (matching
+    /// the concept's "52 минуты") without hand-authored plural variants.
+    static func minutesPhrase(_ interval: TimeInterval) -> String {
+        Duration.seconds(wholeMinutes(interval) * 60)
+            .formatted(.units(allowed: [.minutes], width: .wide))
+    }
 }

@@ -30,6 +30,27 @@ enum HotkeyAction: CaseIterable {
             return HotkeyBinding(keyCode: UInt32(kVK_ANSI_D), carbonModifiers: modifiers)
         }
     }
+
+    /// The chord rendered for display, e.g. "⌃⌥⌘P". Both the modifier glyphs and
+    /// the key glyph derive from `defaultBinding` (mask + keyCode), so the
+    /// display can't drift from what's actually registered if a binding changes.
+    /// Locale-independent — these symbols are universal. The key map covers the
+    /// keys Plyne binds today; the settings recorder will generalise it later.
+    var displayChord: String {
+        let mask = defaultBinding.carbonModifiers
+        var chord = ""
+        if mask & UInt32(controlKey) != 0 { chord += "⌃" }
+        if mask & UInt32(optionKey) != 0 { chord += "⌥" }
+        if mask & UInt32(shiftKey) != 0 { chord += "⇧" }
+        if mask & UInt32(cmdKey) != 0 { chord += "⌘" }
+        switch defaultBinding.keyCode {
+        case UInt32(kVK_ANSI_P): chord += "P"
+        case UInt32(kVK_ANSI_M): chord += "M"
+        case UInt32(kVK_ANSI_D): chord += "D"
+        default: break
+        }
+        return chord
+    }
 }
 
 /// Registers process-global hotkeys via Carbon's `RegisterEventHotKey`.

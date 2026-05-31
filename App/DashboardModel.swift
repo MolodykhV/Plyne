@@ -16,8 +16,16 @@ final class DashboardModel {
     /// Time-ordered items for ``day``.
     private(set) var timeline: [DayTimelineItem] = []
 
+    /// The recurring focus band over the last two weeks, or `nil` when the
+    /// sample is too small or the signal too weak to surface a card.
+    private(set) var focusWindow: FocusWindowInsight?
+
     /// The day the timeline shows (start-of-day). Navigable, never future.
     private(set) var day: Date
+
+    /// Lookback span for the insight cards. Two weeks balances enough sample
+    /// against staying recent (concept §1.11).
+    private let insightLookbackDays = 14
 
     private let repository: any SessionRepository
     private let now: @Sendable () -> Date
@@ -43,10 +51,11 @@ final class DashboardModel {
         day < calendar.startOfDay(for: now())
     }
 
-    /// Loads the week heatmap and the current day's timeline.
+    /// Loads the week heatmap, the insight cards, and the current day's timeline.
     func load() {
         Task {
             await reloadWeek()
+            await reloadInsights()
             await reloadTimeline()
         }
     }
@@ -66,6 +75,22 @@ final class DashboardModel {
             ?? DateInterval(start: calendar.startOfDay(for: reference), duration: 7 * 86_400)
         let sessions = (try? await repository.sessions(in: week)) ?? []
         weekHeatmap = DashboardAnalytics.weekHeatmap(sessions: sessions, weekContaining: reference, calendar: calendar)
+    }
+
+    /// Recomputes the insight cards over the last `insightLookbackDays`. Insights
+    /// are week-scale, so they're tied to the open instant, not the navigable
+    /// ``day`` — `stepDay(by:)` does not refresh them.
+    private func reloadInsights() async {
+        let reference = now()
+        let start = calendar.date(byAdding: .day, value: -insightLookbackDays, to: calendar.startOfDay(for: reference))
+            ?? reference
+        let sessions = (try? await repository.sessions(in: DateInterval(start: start, end: reference))) ?? []
+        focusWindow = DashboardAnalytics.bestFocusWindow(
+            sessions: sessions,
+            endingAt: reference,
+            calendar: calendar,
+            lookbackDays: insightLookbackDays
+        )
     }
 
     private func reloadTimeline() async {

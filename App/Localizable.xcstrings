@@ -436,6 +436,14 @@
         "ru" : { "stringUnit" : { "state" : "translated", "value" : "Сегодня" } }
       }
     },
+    "dashboard.section.observations" : {
+      "comment" : "Dashboard section header above the descriptive insight cards.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Observations" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Наблюдения" } }
+      }
+    },
     "dashboard.day.previous" : {
       "comment" : "VoiceOver label for the previous-day button.",
       "extractionState" : "manual",
@@ -514,6 +522,22 @@
       "localizations" : {
         "en" : { "stringUnit" : { "state" : "translated", "value" : "In progress" } },
         "ru" : { "stringUnit" : { "state" : "translated", "value" : "Идёт сейчас" } }
+      }
+    },
+    "insight.focusWindow %@ %@" : {
+      "comment" : "Insight card. %1 is the start of the focus band, %2 its end (both localized times).",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your focus usually lands between %1$@ and %2$@." } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Фокус обычно приходится на время с %1$@ до %2$@." } }
+      }
+    },
+    "insight.time.midnight" : {
+      "comment" : "Midnight as a focus-band boundary in the insight card, e.g. \"…between 10 PM and midnight.\" Genitive in RU to fit \"с/до полуночи\".",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "midnight" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "полуночи" } }
       }
     },
     "intention.placeholder" : {

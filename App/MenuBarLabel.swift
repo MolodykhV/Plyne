@@ -1,61 +1,38 @@
 import SwiftUI
 import PlyneTimer
 
-/// The status-item glyph: a small ring whose geometry — not colour — encodes
-/// the timer phase, so it reads correctly as a template image that the menu
-/// bar tints for light/dark/vibrancy.
+/// The status-item glyph: the abstract Plyne "sweep" gauge whose *shape* — not
+/// colour — encodes the timer phase, so it reads correctly as a template image
+/// that the menu bar tints for light/dark/vibrancy. It is deliberately not a
+/// clock (no ticks, no hands; it opens at the bottom).
 ///
-/// A live `Canvas`/`Shape` is not reliable inside a `MenuBarExtra` label
-/// (AppKit rasterizes the label region), so this view is rendered to a
-/// template `NSImage` by ``RingImageCache`` and presented via `Image(nsImage:)`.
+/// A live `Canvas` is not reliable inside a `MenuBarExtra` label (AppKit
+/// rasterizes the label region), so this view is rendered to a template
+/// `NSImage` by ``RingImageCache`` and presented via `Image(nsImage:)`.
 struct RingIcon: View {
     let progress: TimerProgress
     let increasedContrast: Bool
 
-    private var stroke: CGFloat { increasedContrast ? 2.4 : 1.7 }
-
     var body: some View {
-        ZStack {
-            // Track: always present, faint. In idle it is the whole icon.
-            Circle()
-                .stroke(.primary.opacity(increasedContrast ? 0.5 : 0.3), lineWidth: stroke)
-
-            switch progress.phase {
-            case .idle:
-                EmptyView()
-
-            case .running:
-                arc(to: progress.fraction)
-
-            case .flowmodoro:
-                // Open-ended: a steady centre dot signals "in session" without
-                // implying a finish line.
-                Circle()
-                    .fill(.primary)
-                    .frame(width: stroke * 2.2, height: stroke * 2.2)
-
-            case .mainEnded, .finished:
-                arc(to: 1)
-
-            case .overflow:
-                arc(to: 1)
-                // A distinct inner mark: continuing past the bell, calmly — not
-                // a flourish.
-                Circle()
-                    .trim(from: 0, to: 0.5)
-                    .stroke(.primary, style: StrokeStyle(lineWidth: stroke, lineCap: .round))
-                    .rotationEffect(.degrees(-90))
-                    .padding(stroke * 2.4)
-            }
-        }
-        .padding(stroke)
+        PlyneGauge(
+            phase: gaugePhase,
+            fraction: progress.fraction,
+            tint: .primary,
+            lineWidth: increasedContrast ? 2.9 : 2.4,
+            // The menu bar needs a near-opaque track/node so every state reads
+            // at ~18 pt once the system tints the template image.
+            bold: true
+        )
     }
 
-    private func arc(to fraction: Double) -> some View {
-        Circle()
-            .trim(from: 0, to: max(fraction, 0.0001))
-            .stroke(.primary, style: StrokeStyle(lineWidth: stroke, lineCap: .round))
-            .rotationEffect(.degrees(-90))
+    private var gaugePhase: PlyneGauge.Phase {
+        switch progress.phase {
+        case .idle: return .idle
+        case .running: return .running
+        case .flowmodoro: return .flowmodoro
+        case .overflow: return .overflow
+        case .mainEnded, .finished: return .ended
+        }
     }
 }
 

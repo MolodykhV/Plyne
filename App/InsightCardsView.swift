@@ -10,27 +10,28 @@ struct InsightCardsView: View {
     let focusWindow: FocusWindowInsight
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: PlyneSpacing.s3) {
             Text("dashboard.section.observations")
-                .font(.title3)
+                .font(.plyneSection)
                 .accessibilityAddTraits(.isHeader)
             FocusWindowCard(insight: focusWindow)
         }
     }
 }
 
-/// One observation: the recurring band where focus tends to land. Rendered as a
-/// quiet content tile — no accent fill, no celebration — matching the heatmap's
-/// neutral surface. Materials/glass stay on control layers, not content.
+/// One observation: the recurring band where focus tends to land. A quiet note
+/// — a neutral icon chip and a plain sentence on a soft content tile, no accent
+/// celebration. Materials/glass stay on control layers, not content.
 private struct FocusWindowCard: View {
     let insight: FocusWindowInsight
 
     var body: some View {
-        HStack(alignment: .top, spacing: 10) {
+        HStack(alignment: .center, spacing: PlyneSpacing.s3) {
             Image(systemName: "clock")
-                .font(.callout)
+                .font(.system(size: 18))
                 .foregroundStyle(.secondary)
-                .frame(width: 18)
+                .frame(width: 34, height: 34)
+                .plyneControlSurface(RoundedRectangle(cornerRadius: 9, style: .continuous), strokeOpacity: 0.08)
                 .accessibilityHidden(true)
             Text(message)
                 .font(.callout)
@@ -38,8 +39,8 @@ private struct FocusWindowCard: View {
                 .fixedSize(horizontal: false, vertical: true)
             Spacer(minLength: 0)
         }
-        .padding(12)
-        .background(RoundedRectangle(cornerRadius: 10).fill(Color.secondary.opacity(0.08)))
+        .padding(PlyneSpacing.s3)
+        .plyneTile()
         .accessibilityElement(children: .combine)
     }
 

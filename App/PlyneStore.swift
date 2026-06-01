@@ -68,6 +68,10 @@ final class PlyneStore {
     /// `@ObservationIgnored`: it's an action hook, not rendered state.
     @ObservationIgnored var openDashboard: (() -> Void)?
 
+    /// Set by the app delegate to re-open the onboarding intro on demand (the
+    /// popover's "Welcome guide" affordance), not only on first launch.
+    @ObservationIgnored var openOnboarding: (() -> Void)?
+
     private let repository: any SessionRepository
     private let calendar: any CalendarReading
     private let now: @Sendable () -> Date

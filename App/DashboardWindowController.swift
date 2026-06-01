@@ -29,17 +29,20 @@ final class DashboardWindowController: NSObject, NSWindowDelegate {
             activateAndFront(window)
             return
         }
-        let root = DashboardView().environment(model)
-        let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 480, height: 620),
-            styleMask: [.titled, .closable, .miniaturizable, .resizable],
-            backing: .buffered,
-            defer: false
+        // A headless, frosted-glass card (floating traffic lights, no title-bar
+        // plate) so the dashboard reads as one Liquid-Glass surface, matching the
+        // menu-bar popover and the approved design. The glass is the window's
+        // contentView (installed in GlassWindow.host), so the view itself is
+        // plain — no SwiftUI background needed.
+        let root = DashboardView()
+            .environment(model)
+        let window = GlassWindow.makeHeadless(
+            size: NSSize(width: 480, height: 620),
+            resizable: true,
+            title: String(localized: "dashboard.window.title"),
+            delegate: self
         )
-        window.title = String(localized: "dashboard.window.title")
-        window.contentViewController = NSHostingController(rootView: root)
-        window.isReleasedWhenClosed = false  // we hold the reference; release on close
-        window.delegate = self
+        GlassWindow.host(root, in: window)
         window.center()
         window.setContentSize(NSSize(width: 480, height: 620))
         self.window = window

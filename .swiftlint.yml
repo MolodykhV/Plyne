@@ -53,6 +53,21 @@ identifier_name:
     - id
     - x
     - y
+    # Design-system token vocabulary (PlyneTheme): spacing scale s1–s8 and the
+    # xs/sm/md/lg/xl size steps are intentionally terse, shared names.
+    - s1
+    - s2
+    - s3
+    - s4
+    - s5
+    - s6
+    - s7
+    - s8
+    - xs
+    - sm
+    - md
+    - lg
+    - xl
 
 file_length:
   warning: 400

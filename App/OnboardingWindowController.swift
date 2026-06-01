@@ -17,24 +17,31 @@ final class OnboardingWindowController: NSObject, NSWindowDelegate {
     }
 
     /// Shows the onboarding window on first run only; a no-op once it has been
-    /// seen.
+    /// seen. Marking seen here (not only on close) survives a Cmd-Q while the
+    /// window is open — windowWillClose is not delivered on app terminate.
     func showIfNeeded() {
         guard !gate.hasCompleted else { return }
-        // Mark seen the moment we present it: by design any presentation counts
-        // as "seen", and writing here (not only on close) survives a Cmd-Q while
-        // the window is open — windowWillClose is not delivered on app terminate.
         gate.markCompleted()
+        show()
+    }
+
+    /// Presents the onboarding intro on demand (the popover's "Welcome guide"),
+    /// reusing the existing window if it's already open (single-instance).
+    func show() {
+        if let window {
+            activateAndFront(window)
+            return
+        }
+        // A headless, frosted-glass card (floating traffic lights, no title-bar
+        // plate) — reads as one calm Liquid-Glass surface, matching the popover.
         let root = OnboardingView(onDone: { [weak self] in self?.window?.close() })
-        let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 460, height: 430),
-            styleMask: [.titled, .closable],
-            backing: .buffered,
-            defer: false
+        let window = GlassWindow.makeHeadless(
+            size: NSSize(width: 460, height: 430),
+            resizable: false,
+            title: String(localized: "onboarding.window.title"),
+            delegate: self
         )
-        window.title = String(localized: "onboarding.window.title")
-        window.contentViewController = NSHostingController(rootView: root)
-        window.isReleasedWhenClosed = false  // we hold the reference; release on close
-        window.delegate = self
+        GlassWindow.host(root, in: window)
         window.center()
         self.window = window
         activateAndFront(window)

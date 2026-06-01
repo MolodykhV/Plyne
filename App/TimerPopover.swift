@@ -3,28 +3,46 @@ import PlyneCore
 import PlyneTimer
 
 /// The menu-bar popover. A thin function of `store.state`: each state maps to
-/// one calm pane. Liquid Glass is confined to the action buttons; everything
-/// else sits on a plain background, per the concept's "glass on the control
-/// layer only" rule.
+/// one calm pane. Liquid Glass / material stays on the control layer (buttons,
+/// fields, chips); content sits on the popover's own background, warmed only by
+/// the faint brand-wave crown and accent washes, per the concept's "glass on
+/// the control layer only" rule.
 struct TimerPopover: View {
     @Environment(PlyneStore.self) private var store
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            pane
-                .transition(.opacity)
-                .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: store.state)
+        VStack(alignment: .leading, spacing: PlyneSpacing.s4) {
+            // The panes overlap in a ZStack so a swap CROSS-DISSOLVES (a VStack
+            // would briefly stack the two panes vertically and mask it). The
+            // `.animation` lives on this stable parent — not on the id'd child —
+            // which is what actually drives the child's insert/remove transition.
+            ZStack(alignment: .topLeading) {
+                pane
+                    // A stable per-pane identity so the swap is a clean
+                    // insert/remove (and the transition fires) on a real pane
+                    // change, never on a tick.
+                    .id(paneKey)
+                    .transition(.plynePane)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .animation(reduceMotion ? nil : PlyneMotion.ease(PlyneMotion.slow), value: paneKey)
 
             if let notice = store.notice {
                 NoticeRow(notice: notice) { store.dismissNotice() }
+                    .transition(.plynePane)
             }
 
             Divider()
             Footer()
         }
-        .padding(16)
+        .padding(PlyneSpacing.s4)
         .frame(width: 300)
+        .animation(reduceMotion ? nil : PlyneMotion.ease(), value: store.notice != nil)
+        // A whisper of the brand wave at the very top — it should sit *behind*
+        // the content, not wash it; the design keeps it barely-there over the
+        // translucent popover. Hidden entirely under Reduce Transparency.
+        .plyneCrown(height: 104, opacity: 0.15)
     }
 
     @ViewBuilder
@@ -42,6 +60,18 @@ struct TimerPopover: View {
             FinishedPane(session: session)
         }
     }
+
+    /// One key per pane *kind* — idle/preparing/abandoned all read as "idle",
+    /// so the cross-dissolve fires only on a genuine pane change.
+    private var paneKey: String {
+        switch store.state {
+        case .idle, .preparing, .abandoned: return "idle"
+        case .running: return "running"
+        case .mainEnded: return "mainEnded"
+        case .overflow: return "overflow"
+        case .finished: return "finished"
+        }
+    }
 }
 
 // MARK: - Panes
@@ -53,114 +83,94 @@ private struct IdlePane: View {
     @State private var addingPastSession = false
 
     var body: some View {
-        Group {
+        ZStack(alignment: .topLeading) {
             if addingPastSession {
                 RetroactiveEntryPane { addingPastSession = false }
+                    .transition(.plynePane)
             } else {
                 startContent
+                    .transition(.plynePane)
             }
         }
-        .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: addingPastSession)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .animation(reduceMotion ? nil : PlyneMotion.ease(PlyneMotion.slow), value: addingPastSession)
     }
 
     private var startContent: some View {
         @Bindable var store = store
         let inMeeting = store.meetingNow != nil
-        return VStack(alignment: .leading, spacing: 12) {
+        return VStack(alignment: .leading, spacing: PlyneSpacing.s4) {
             // A meeting is on: state it plainly and offer manual start — never
             // block (concept: respect for autonomy).
             if inMeeting {
-                Text("calendar.meeting_now.title")
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
+                MeetingHint()
             }
 
-            Picker("mode.picker.label", selection: $store.draftMode) {
-                Text("mode.pomodoro").tag(PickerMode.pomodoro)
-                Text("mode.flowmodoro").tag(PickerMode.flowmodoro)
-            }
-            .pickerStyle(.segmented)
-            .labelsHidden()
+            ModeSegmented(selection: $store.draftMode)
 
-            TextField("intention.placeholder", text: $store.draftIntention)
-                .textFieldStyle(.plain)
-                .lineLimit(1)
-                .focused($intentionFocused)
-                .onSubmit { store.start() }
+            // The intention + its recent suggestions read as one group: the
+            // visual lead of this pane.
+            VStack(alignment: .leading, spacing: PlyneSpacing.s2) {
+                TextField("intention.placeholder", text: $store.draftIntention)
+                    .focused($intentionFocused)
+                    .plyneField(focused: intentionFocused, big: true)
+                    .onSubmit { store.start() }
 
-            if !store.suggestions.isEmpty {
-                SuggestionList(suggestions: store.suggestions) { suggestion in
-                    store.applySuggestion(suggestion)
-                    // The tapped row is dropped from the re-ranked list (it now
-                    // equals the draft), so its element is torn out; return
-                    // focus to the field for keyboard/VoiceOver users.
-                    DispatchQueue.main.async { intentionFocused = true }
+                if !store.suggestions.isEmpty {
+                    IntentionChips(titles: store.suggestions.map(\.text)) { index in
+                        // Index into the live list defensively: history can be
+                        // re-ranked asynchronously between render and tap.
+                        guard index < store.suggestions.count else { return }
+                        store.applySuggestion(store.suggestions[index])
+                        // The tapped row is re-ranked out of the list; return
+                        // focus to the field for keyboard/VoiceOver users.
+                        DispatchQueue.main.async { intentionFocused = true }
+                    }
+                    .accessibilityHint(Text("a11y.suggestion.hint"))
                 }
             }
 
-            PrimaryButton(inMeeting ? "calendar.meeting_now.start" : "action.start") { store.start() }
-                .frame(maxWidth: .infinity)
-
-            // Only meaningful when there is typed text to ignore; otherwise the
-            // primary Start already begins with no focus, so showing it would
-            // just duplicate that button.
-            if store.hasDraftIntention {
-                Button("action.start_without_intention") { store.startWithoutIntention() }
-                    .buttonStyle(.plain)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+            VStack(spacing: PlyneSpacing.s2) {
+                PrimaryButton(inMeeting ? "calendar.meeting_now.start" : "action.start") { store.start() }
                     .frame(maxWidth: .infinity)
+
+                // Only meaningful when there is typed text to ignore; otherwise
+                // the primary Start already begins with no focus.
+                if store.hasDraftIntention {
+                    HStack {
+                        Spacer(minLength: 0)
+                        PlyneTextButton("action.start_without_intention") { store.startWithoutIntention() }
+                        Spacer(minLength: 0)
+                    }
+                }
             }
+
+            Divider()
 
             CalendarConnectRow()
 
             Divider()
 
             HStack {
-                Button("retro.add") { addingPastSession = true }
-                Spacer(minLength: 8)
-                Button("dashboard.open") { store.openDashboard?() }
+                PlyneTextButton("retro.add", systemImage: "clock.arrow.circlepath") {
+                    addingPastSession = true
+                }
+                Spacer(minLength: PlyneSpacing.s2)
+                PlyneTextButton("dashboard.open", systemImage: "square.grid.2x2") {
+                    store.openDashboard?()
+                }
             }
-            .buttonStyle(.plain)
-            .font(.footnote)
-            .foregroundStyle(.secondary)
         }
         // Smooth the popover's resize as suggestions filter in and out while
         // typing, per the concept's calm-motion rule; off under Reduce Motion.
-        .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: store.suggestions)
-        .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: store.hasDraftIntention)
-        .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: inMeeting)
+        .animation(reduceMotion ? nil : PlyneMotion.ease(), value: store.suggestions)
+        .animation(reduceMotion ? nil : PlyneMotion.ease(), value: store.hasDraftIntention)
+        .animation(reduceMotion ? nil : PlyneMotion.ease(), value: inMeeting)
         .onAppear {
             store.loadIntentionHistory()
             // The popover window may not be key on open, so defer focus a
             // runloop turn. Typing may still require a first click on Tahoe.
             DispatchQueue.main.async { intentionFocused = true }
-        }
-    }
-}
-
-/// A short, tappable list of recent intentions. Selecting one fills the field
-/// (the user can still edit before starting). Plain rows on the content layer
-/// — no glass, no decoration — to keep the prompt calm.
-private struct SuggestionList: View {
-    let suggestions: [IntentionSuggestion]
-    let onSelect: (IntentionSuggestion) -> Void
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            ForEach(suggestions, id: \.text) { suggestion in
-                Button { onSelect(suggestion) } label: {
-                    Text(suggestion.text)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .font(.callout)
-                .foregroundStyle(.secondary)
-                .accessibilityHint(Text("a11y.suggestion.hint"))
-            }
         }
     }
 }
@@ -183,13 +193,21 @@ private struct RunningPane: View {
         return "a11y.elapsed \(DurationFormatting.spoken(store.displayNow.timeIntervalSince(active.startedAt)))"
     }
 
+    /// Tells the sighted user whether the number counts down (Pomodoro) or up
+    /// (Flowmodoro). VoiceOver hears the same via the spoken label above.
+    private var readoutSub: LocalizedStringKey {
+        active.pomodoroWorkEnd != nil ? "timer.readout.remaining" : "timer.readout.elapsed"
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            TimeReadout(text: displayText, accessibility: spokenLabelKey)
-            IntentionLine(intention: active.intention)
-            HStack(spacing: 8) {
-                PrimaryButton("action.end") { store.end() }
+        VStack(alignment: .leading, spacing: PlyneSpacing.s4) {
+            TimeReadout(text: displayText, accessibility: spokenLabelKey, sub: readoutSub)
+            IntentionPill(intention: active.intention)
+            HStack(spacing: PlyneSpacing.s2) {
                 SecondaryButton("action.discard") { store.discard() }
+                    .frame(maxWidth: .infinity)
+                PrimaryButton("action.end") { store.end() }
+                    .frame(maxWidth: .infinity)
             }
         }
     }
@@ -200,13 +218,24 @@ private struct MainEndedPane: View {
     let active: ActiveSession
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("session.bell.title")
-                .font(.headline)
-            IntentionLine(intention: active.intention)
-            HStack(spacing: 8) {
-                PrimaryButton("action.finish") { store.end() }
+        VStack(alignment: .center, spacing: PlyneSpacing.s4) {
+            VStack(spacing: PlyneSpacing.s3) {
+                PlyneGauge(phase: .ended, tint: .accentColor, lineWidth: 2)
+                    .frame(width: 40, height: 40)
+                    .accessibilityHidden(true)
+                Text("session.bell.title")
+                    .font(.headline)
+                    .multilineTextAlignment(.center)
+            }
+            .frame(maxWidth: .infinity)
+
+            IntentionPill(intention: active.intention)
+
+            HStack(spacing: PlyneSpacing.s2) {
                 SecondaryButton("action.keep_going") { store.keepGoing() }
+                    .frame(maxWidth: .infinity)
+                PrimaryButton("action.finish") { store.end() }
+                    .frame(maxWidth: .infinity)
             }
         }
     }
@@ -220,15 +249,19 @@ private struct OverflowPane: View {
     private var remaining: TimeInterval { until.timeIntervalSince(store.displayNow) }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: PlyneSpacing.s4) {
             TimeReadout(
                 text: DurationFormatting.clock(remaining),
-                accessibility: "a11y.remaining \(DurationFormatting.spoken(remaining))"
+                accessibility: "a11y.remaining \(DurationFormatting.spoken(remaining))",
+                sub: "timer.readout.overflow",
+                accent: true
             )
-            IntentionLine(intention: active.intention)
-            HStack(spacing: 8) {
-                PrimaryButton("action.finish") { store.end() }
+            IntentionPill(intention: active.intention)
+            HStack(spacing: PlyneSpacing.s2) {
                 SecondaryButton("action.discard") { store.discard() }
+                    .frame(maxWidth: .infinity)
+                PrimaryButton("action.finish") { store.end() }
+                    .frame(maxWidth: .infinity)
             }
         }
     }
@@ -247,9 +280,13 @@ private struct FinishedPane: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .center, spacing: PlyneSpacing.s4) {
             Text(summary)
                 .font(.callout)
+                .multilineTextAlignment(.center)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity)
+                .padding(.top, PlyneSpacing.s2)
             PrimaryButton("action.done") { store.reset() }
                 .frame(maxWidth: .infinity)
         }
@@ -258,28 +295,24 @@ private struct FinishedPane: View {
 
 // MARK: - Shared pieces
 
-private struct TimeReadout: View {
-    let text: String
-    let accessibility: LocalizedStringResource
-
+/// The neutral "a meeting is on now" hint shown in Idle during a meeting.
+private struct MeetingHint: View {
     var body: some View {
-        Text(text)
-            .font(.system(.largeTitle, design: .rounded))
-            .monospacedDigit()
-            .accessibilityLabel(Text(accessibility))
-    }
-}
-
-private struct IntentionLine: View {
-    let intention: String?
-
-    var body: some View {
-        if let intention, !intention.isEmpty {
-            Text(intention)
+        HStack(spacing: PlyneSpacing.s2) {
+            Image(systemName: "person.2")
                 .font(.callout)
                 .foregroundStyle(.secondary)
-                .lineLimit(2)
+                .accessibilityHidden(true)
+            Text("calendar.meeting_now.title")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            Spacer(minLength: 0)
         }
+        .padding(.vertical, PlyneSpacing.s2)
+        .padding(.horizontal, PlyneSpacing.s3)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .plyneTile(cornerRadius: PlyneRadius.sm)
+        .accessibilityElement(children: .combine)
     }
 }
 
@@ -288,7 +321,11 @@ private struct NoticeRow: View {
     let dismiss: () -> Void
 
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: PlyneSpacing.s2) {
+            Image(systemName: "info.circle")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .accessibilityHidden(true)
             Text(notice.messageKey)
                 .font(.footnote)
                 .foregroundStyle(.secondary)
@@ -297,14 +334,26 @@ private struct NoticeRow: View {
                 .buttonStyle(.plain)
                 .font(.footnote)
         }
+        .padding(.vertical, PlyneSpacing.s2)
+        .padding(.horizontal, PlyneSpacing.s3)
+        .plyneTile(cornerRadius: PlyneRadius.sm)
     }
 }
 
+/// The shell's persistent bottom strip: a quiet "Welcome guide" (re-opens the
+/// intro on demand) on the left and "Quit Plyne" on the right, with a hairline
+/// above (drawn by the caller).
 private struct Footer: View {
+    @Environment(PlyneStore.self) private var store
+
     var body: some View {
-        Button("menubar.quit") { NSApplication.shared.terminate(nil) }
-            .buttonStyle(.plain)
-            .keyboardShortcut("q")
-            .frame(maxWidth: .infinity, alignment: .leading)
+        HStack {
+            PlyneTextButton("onboarding.reopen", systemImage: "questionmark.circle") {
+                store.openOnboarding?()
+            }
+            Spacer(minLength: PlyneSpacing.s2)
+            PlyneTextButton("menubar.quit") { NSApplication.shared.terminate(nil) }
+                .keyboardShortcut("q")
+        }
     }
 }

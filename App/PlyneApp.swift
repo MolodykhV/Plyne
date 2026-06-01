@@ -27,6 +27,7 @@ struct PlyneApp: App {
 final class AppDelegate: NSObject, NSApplicationDelegate {
     let store: PlyneStore
     private let dashboard: DashboardWindowController
+    private let onboarding = OnboardingWindowController(gate: OnboardingGate())
     private let hotkeys = GlobalHotkeyCenter()
 
     override init() {
@@ -56,6 +57,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         // The popover's "Open dashboard" button routes through the same window.
         store.openDashboard = { [dashboard] in dashboard.show() }
+        // The popover's "Welcome guide" re-opens the intro any time.
+        store.openOnboarding = { [onboarding] in onboarding.show() }
+
+        // First launch only: a calm three-screen intro (no-op afterwards).
+        onboarding.showIfNeeded()
     }
 
     /// Builds the persistence repository. If the on-disk store can't be opened

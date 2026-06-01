@@ -3,49 +3,55 @@ import PlyneCore
 import SwiftUI
 
 /// A vertical, time-ordered list of the day's focus sessions and calendar
-/// blocks. Factual, never scored: an interrupted session looks identical to a
-/// completed one, and calendar rows read lighter so the user's own sessions
-/// stay primary.
+/// blocks, connected by a quiet timeline rail. Factual, never scored: an
+/// interrupted session looks identical to a completed one, and calendar rows
+/// read lighter (a neutral symbol) so the user's own sessions — marked with the
+/// Plyne gauge in the accent — stay primary.
 struct DayTimelineView: View {
     let items: [DayTimelineItem]
 
+    // No inner ScrollView: the dashboard scrolls as one continuous column
+    // (heatmap → observations → timeline), matching the approved design.
     var body: some View {
         if items.isEmpty {
             Text("timeline.empty")
                 .font(.callout)
                 .foregroundStyle(.secondary)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(maxWidth: .infinity, minHeight: 80)
                 .multilineTextAlignment(.center)
         } else {
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 10) {
-                    ForEach(items) { item in
-                        TimelineRow(item: item)
-                    }
+            LazyVStack(alignment: .leading, spacing: 0) {
+                ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
+                    TimelineRow(item: item, isLast: index == items.count - 1)
                 }
-                .padding(.vertical, 4)
             }
+            .padding(.vertical, PlyneSpacing.s1)
         }
     }
 }
 
 private struct TimelineRow: View {
     let item: DayTimelineItem
+    let isLast: Bool
 
     var body: some View {
-        HStack(alignment: .top, spacing: 10) {
+        HStack(alignment: .top, spacing: PlyneSpacing.s3) {
             Text(item.start.formatted(.dateTime.hour().minute()))
                 .font(.callout.monospacedDigit())
                 .foregroundStyle(.secondary)
-                .frame(width: 56, alignment: .trailing)
+                .frame(width: 48, alignment: .trailing)
+                .padding(.top, 4)
 
-            Image(systemName: symbol)
-                .font(.callout)
-                .foregroundStyle(isCalendar ? .secondary : .primary)
-                .frame(width: 18)
-                // VoiceOver can't see the symbol/weight cue, so name the kind
-                // (the row combines children into one spoken string).
-                .accessibilityLabel(Text(isCalendar ? "timeline.kind.calendar" : "timeline.kind.session"))
+            // The rail: an icon chip with a connector running to the next row.
+            VStack(spacing: 3) {
+                iconChip
+                if !isLast {
+                    Rectangle()
+                        .fill(Color.primary.opacity(0.12))
+                        .frame(width: 1.5)
+                        .frame(maxHeight: .infinity)
+                }
+            }
 
             VStack(alignment: .leading, spacing: 1) {
                 Text(title)
@@ -56,9 +62,32 @@ private struct TimelineRow: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
+            .padding(.top, 5)
+            .padding(.bottom, isLast ? 0 : PlyneSpacing.s4)
             Spacer(minLength: 0)
         }
         .accessibilityElement(children: .combine)
+    }
+
+    /// The 26-pt rail node: the accent gauge for the user's own sessions, a
+    /// neutral SF Symbol for calendar blocks.
+    private var iconChip: some View {
+        ZStack {
+            if isCalendar {
+                Image(systemName: symbol)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            } else {
+                PlyneGauge(phase: .idle, tint: .accentColor, lineWidth: 2.6)
+                    .frame(width: 16, height: 16)
+                    .accessibilityHidden(true)
+            }
+        }
+        .frame(width: 26, height: 26)
+        .plyneControlSurface(RoundedRectangle(cornerRadius: 8, style: .continuous), strokeOpacity: 0.08)
+        // VoiceOver can't see the symbol/weight cue, so name the kind (the row
+        // combines children into one spoken string).
+        .accessibilityLabel(Text(isCalendar ? "timeline.kind.calendar" : "timeline.kind.session"))
     }
 
     private var isCalendar: Bool {

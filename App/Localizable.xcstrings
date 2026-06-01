@@ -1,149 +1,153 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "a11y.elapsed %@" : {
-      "comment" : "VoiceOver label for the count-up timer. %@ is a spelled duration.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ elapsed"
+  "sourceLanguage": "en",
+  "strings": {
+    "a11y.elapsed %@": {
+      "comment": "VoiceOver label for the count-up timer. %@ is a spelled duration.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ elapsed"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Прошло %@"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прошло %@"
           }
         }
       }
     },
-    "a11y.remaining %@" : {
-      "comment" : "VoiceOver label for the countdown timer. %@ is a spelled duration.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ remaining"
+    "a11y.remaining %@": {
+      "comment": "VoiceOver label for the countdown timer. %@ is a spelled duration.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ remaining"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Осталось %@"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Осталось %@"
           }
         }
       }
     },
-    "a11y.ring.ended" : {
-      "comment" : "VoiceOver label for the menu-bar icon when a session has reached its end (awaiting a choice, or just finished).",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Session reached the end"
+    "a11y.ring.ended": {
+      "comment": "VoiceOver label for the menu-bar icon when a session has reached its end (awaiting a choice, or just finished).",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Session reached the end"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Сессия дошла до конца"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сессия дошла до конца"
           }
         }
       }
     },
-    "a11y.ring.flowmodoro" : {
-      "comment" : "VoiceOver label for the menu-bar icon during an open-ended session.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open session running"
+    "a11y.ring.flowmodoro": {
+      "comment": "VoiceOver label for the menu-bar icon during an open-ended session.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open session running"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Идёт открытая сессия"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Идёт открытая сессия"
           }
         }
       }
     },
-    "a11y.ring.idle" : {
-      "comment" : "VoiceOver label for the menu-bar icon when no session is running.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No session running"
+    "a11y.ring.idle": {
+      "comment": "VoiceOver label for the menu-bar icon when no session is running.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No session running"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Сессия не идёт"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сессия не идёт"
           }
         }
       }
     },
-    "a11y.ring.overflow" : {
-      "comment" : "VoiceOver label for the menu-bar icon while continuing past the timer.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Continuing past the timer"
+    "a11y.ring.overflow": {
+      "comment": "VoiceOver label for the menu-bar icon while continuing past the timer.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuing past the timer"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Продолжение после таймера"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Продолжение после таймера"
           }
         }
       }
     },
-    "a11y.ring.running %lld" : {
-      "comment" : "VoiceOver label for the menu-bar icon during a Pomodoro. %lld is percent complete.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Session running, %1$lld percent of the planned time"
+    "a11y.ring.running %@": {
+      "comment": "A label that reads \"a11y.ring.running\" followed by a percentage. For example, \"a11y.ring.running 42\".",
+      "isCommentAutoGenerated": true
+    },
+    "a11y.ring.running %lld": {
+      "comment": "VoiceOver label for the menu-bar icon during a Pomodoro. %lld is percent complete.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Session running, %1$lld percent of the planned time"
           }
         },
-        "ru" : {
-          "variations" : {
-            "plural" : {
-              "few" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Идёт сессия, %1$lld процента запланированного времени"
+        "ru": {
+          "variations": {
+            "plural": {
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Идёт сессия, %1$lld процента запланированного времени"
                 }
               },
-              "many" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Идёт сессия, %1$lld процентов запланированного времени"
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Идёт сессия, %1$lld процентов запланированного времени"
                 }
               },
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Идёт сессия, %1$lld процент запланированного времени"
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Идёт сессия, %1$lld процент запланированного времени"
                 }
               },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Идёт сессия, %1$lld процента запланированного времени"
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Идёт сессия, %1$lld процента запланированного времени"
                 }
               }
             }
@@ -151,896 +155,1236 @@
         }
       }
     },
-    "a11y.suggestion.hint" : {
-      "comment" : "VoiceOver hint on a recent-focus suggestion row.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Use this focus"
+    "a11y.suggestion.hint": {
+      "comment": "VoiceOver hint on a recent-focus suggestion row.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use this focus"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Использовать этот фокус"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Использовать этот фокус"
           }
         }
       }
     },
-    "action.cancel" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cancel"
+    "action.cancel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Отмена"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отмена"
           }
         }
       }
     },
-    "action.discard" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Discard"
+    "action.discard": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Сбросить"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сбросить"
           }
         }
       }
     },
-    "action.dismiss" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dismiss"
+    "action.dismiss": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dismiss"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Скрыть"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скрыть"
           }
         }
       }
     },
-    "action.done" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Done"
+    "action.done": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Готово"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Готово"
           }
         }
       }
     },
-    "action.end" : {
-      "comment" : "Stop the running session now.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "End"
+    "action.end": {
+      "comment": "Stop the running session now.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "End"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Завершить"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Завершить"
           }
         }
       }
     },
-    "action.finish" : {
-      "comment" : "Complete the session after the bell.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finish"
+    "action.finish": {
+      "comment": "Complete the session after the bell.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Завершить"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Завершить"
           }
         }
       }
     },
-    "action.keep_going" : {
-      "comment" : "Continue past the bell into an overflow window.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keep going"
+    "action.keep_going": {
+      "comment": "Continue past the bell into an overflow window.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep going"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Продолжить"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Продолжить"
           }
         }
       }
     },
-    "action.start" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Start"
+    "action.start": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Начать"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Начать"
           }
         }
       }
     },
-    "action.start_without_intention" : {
-      "comment" : "Tertiary action shown only when the field has text — start without recording it. The visible noun is 'focus', matching the field's placeholder; 'note'/'заметка' is reserved for the post-session reflection.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Start without naming a focus"
+    "action.start_without_intention": {
+      "comment": "Tertiary action shown only when the field has text — start without recording it. The visible noun is 'focus', matching the field's placeholder; 'note'/'заметка' is reserved for the post-session reflection.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start without naming a focus"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Начать, не называя фокус"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Начать, не называя фокус"
           }
         }
       }
     },
-    "calendar.connect" : {
-      "comment" : "Idle-screen opt-in to read the calendar (read-only).",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Connect calendar"
+    "calendar.connect": {
+      "comment": "Idle-screen opt-in to read the calendar (read-only).",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect calendar"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Подключить календарь"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подключить календарь"
           }
         }
       }
     },
-    "calendar.connect.rationale" : {
-      "comment" : "One-line factual rationale shown under the Connect button.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plyne reads only today's events so it won't suggest a timer during a meeting. This stays on your device."
+    "calendar.connect.rationale": {
+      "comment": "One-line factual rationale shown under the Connect button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plyne reads only today's events so it won't suggest a timer during a meeting. This stays on your device."
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plyne читает только сегодняшние события, чтобы не предлагать таймер во время встречи. Данные остаются на устройстве."
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plyne читает только сегодняшние события, чтобы не предлагать таймер во время встречи. Данные остаются на устройстве."
           }
         }
       }
     },
-    "calendar.denied" : {
-      "comment" : "Calm note when calendar access was declined.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Calendar access is off. You can turn it on in System Settings."
+    "calendar.denied": {
+      "comment": "Calm note when calendar access was declined.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calendar access is off. You can turn it on in System Settings."
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Доступ к календарю выключен. Можно включить в Системных настройках."
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Доступ к календарю выключен. Можно включить в Системных настройках."
           }
         }
       }
     },
-    "calendar.denied.open_settings" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Settings"
+    "calendar.denied.open_settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Settings"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Открыть настройки"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Открыть настройки"
           }
         }
       }
     },
-    "calendar.meeting_now.start" : {
-      "comment" : "Start-anyway action offered during a meeting; the timer is never blocked.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Start anyway"
+    "calendar.meeting_now.start": {
+      "comment": "Start-anyway action offered during a meeting; the timer is never blocked.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start anyway"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Всё равно начать"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Всё равно начать"
           }
         }
       }
     },
-    "calendar.meeting_now.title" : {
-      "comment" : "Neutral note shown on the idle screen while a meeting is happening now.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "A meeting is on now — no timer suggested."
+    "calendar.meeting_now.title": {
+      "comment": "Neutral note shown on the idle screen while a meeting is happening now.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A meeting is on now — no timer suggested."
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Сейчас встреча — таймер не предлагается."
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сейчас встреча — таймер не предлагается."
           }
         }
       }
     },
-    "calendar.restricted" : {
-      "comment" : "Calendar access blocked by policy (MDM/parental) and unchangeable by the user.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Calendar access isn't available on this device."
+    "calendar.restricted": {
+      "comment": "Calendar access blocked by policy (MDM/parental) and unchangeable by the user.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calendar access isn't available on this device."
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Календарь на этом устройстве недоступен."
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Календарь на этом устройстве недоступен."
           }
         }
       }
     },
-    "dashboard.day.next" : {
-      "comment" : "VoiceOver label for the next-day button.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Next day"
+    "dashboard.day.next": {
+      "comment": "VoiceOver label for the next-day button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next day"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Следующий день"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Следующий день"
           }
         }
       }
     },
-    "dashboard.day.previous" : {
-      "comment" : "VoiceOver label for the previous-day button.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Previous day"
+    "dashboard.day.previous": {
+      "comment": "VoiceOver label for the previous-day button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previous day"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Предыдущий день"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Предыдущий день"
           }
         }
       }
     },
-    "dashboard.open" : {
-      "comment" : "Popover button that opens the overview window.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Overview"
+    "dashboard.open": {
+      "comment": "Popover button that opens the overview window.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overview"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Обзор"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обзор"
           }
         }
       }
     },
-    "dashboard.section.observations" : {
-      "comment" : "Dashboard section header above the descriptive insight cards.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Observations"
+    "dashboard.section.observations": {
+      "comment": "Dashboard section header above the descriptive insight cards.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Observations"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Наблюдения"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Наблюдения"
           }
         }
       }
     },
-    "dashboard.section.today" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Today"
+    "dashboard.section.today": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Сегодня"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сегодня"
           }
         }
       }
     },
-    "dashboard.section.week" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This week"
+    "dashboard.section.week": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This week"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "На этой неделе"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На этой неделе"
           }
         }
       }
     },
-    "dashboard.window.title" : {
-      "comment" : "Title of the overview window.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Overview"
+    "dashboard.window.title": {
+      "comment": "Title of the overview window.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overview"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Обзор"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обзор"
           }
         }
       }
     },
-    "heatmap.row.empty %@" : {
-      "comment" : "VoiceOver summary for a weekday with no focus. %@ is the weekday.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@: no focus recorded."
+    "heatmap.row.empty %@": {
+      "comment": "VoiceOver summary for a weekday with no focus. %@ is the weekday.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: no focus recorded."
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@: фокуса не записано."
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: фокуса не записано."
           }
         }
       }
     },
-    "heatmap.row.summary %@ %@" : {
-      "comment" : "VoiceOver summary for one weekday row. %1 is the weekday, %2 is a list of hours with focus.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@: focus at %2$@."
+    "heatmap.row.summary %@ %@": {
+      "comment": "VoiceOver summary for one weekday row. %1 is the weekday, %2 is a list of hours with focus.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@: focus at %2$@."
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@: фокус в %2$@."
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@: фокус в %2$@."
           }
         }
       }
     },
-    "heatmap.title" : {
-      "comment" : "Accessibility label / heading for the week heatmap.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This week, focus by hour"
+    "heatmap.title": {
+      "comment": "Accessibility label / heading for the week heatmap.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This week, focus by hour"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "На этой неделе — фокус по часам"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На этой неделе — фокус по часам"
           }
         }
       }
     },
-    "insight.focusWindow %@ %@" : {
-      "comment" : "Insight card. %1 is the start of the focus band, %2 its end (both localized times).",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your focus usually lands between %1$@ and %2$@."
+    "insight.focusWindow %@ %@": {
+      "comment": "Insight card. %1 is the start of the focus band, %2 its end (both localized times).",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your focus usually lands between %1$@ and %2$@."
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Фокус обычно приходится на время с %1$@ до %2$@."
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фокус обычно приходится на время с %1$@ до %2$@."
           }
         }
       }
     },
-    "insight.time.midnight" : {
-      "comment" : "Midnight as a focus-band boundary in the insight card, e.g. \"…between 10 PM and midnight.\" Genitive in RU to fit \"с/до полуночи\".",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "midnight"
+    "insight.time.midnight": {
+      "comment": "Midnight as a focus-band boundary in the insight card, e.g. \"…between 10 PM and midnight.\" Genitive in RU to fit \"с/до полуночи\".",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "midnight"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "полуночи"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "полуночи"
           }
         }
       }
     },
-    "intention.placeholder" : {
-      "comment" : "Placeholder in the pre-session intention field.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "What are you focusing on?"
+    "intention.placeholder": {
+      "comment": "Placeholder in the pre-session intention field.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What are you focusing on?"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "На чём фокус?"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "На чём фокус?"
           }
         }
       }
     },
-    "menubar.quit" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Quit"
+    "menubar.quit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quit"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Выйти"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выйти"
           }
         }
       }
     },
-    "mode.flowmodoro" : {
-      "comment" : "Product technique name; kept untranslated in both locales.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Flowmodoro"
+    "mode.flowmodoro": {
+      "comment": "Product technique name; kept untranslated in both locales.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flowmodoro"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Flowmodoro"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flowmodoro"
           }
         }
       }
     },
-    "mode.picker.label" : {
-      "comment" : "Accessibility label for the mode picker (visually hidden).",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Timer mode"
+    "mode.picker.label": {
+      "comment": "Accessibility label for the mode picker (visually hidden).",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timer mode"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Режим таймера"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Режим таймера"
           }
         }
       }
     },
-    "mode.pomodoro" : {
-      "comment" : "Product technique name; kept untranslated in both locales.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pomodoro"
+    "mode.pomodoro": {
+      "comment": "Product technique name; kept untranslated in both locales.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pomodoro"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pomodoro"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pomodoro"
           }
         }
       }
     },
-    "notice.could_not_save" : {
-      "comment" : "Calm notice when a finished session could not be persisted.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This session wasn't saved."
+    "notice.could_not_save": {
+      "comment": "Calm notice when a finished session could not be persisted.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This session wasn't saved."
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Эта сессия не сохранена."
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Эта сессия не сохранена."
           }
         }
       }
     },
-    "retro.add" : {
-      "comment" : "Idle-screen entry point to record a session that already happened.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add a past session"
+    "onboarding.back": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Добавить прошедшую сессию"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Назад"
           }
         }
       }
     },
-    "retro.duration %lld" : {
-      "comment" : "Duration stepper value in the retroactive form. %lld is minutes; the unit stays abbreviated (min/мин) on purpose — a compact control value, not prose, so no plural agreement is needed.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld min"
+    "onboarding.calendar.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plyne can read today's events so it won't suggest a timer during a meeting. Your calendar stays on this Mac — nothing is sent anywhere. You can connect it later from the menu."
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld мин"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plyne может читать сегодняшние события, чтобы не предлагать таймер во время встречи. Календарь остаётся на этом Mac — ничего никуда не отправляется. Подключить можно позже из меню."
           }
         }
       }
     },
-    "retro.overlap" : {
-      "comment" : "Calm, non-blocking warning when a retroactive session overlaps already-recorded time.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This overlaps time you've already recorded."
+    "onboarding.calendar.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your calendar, if you want it"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Это пересекается с уже записанным временем."
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Календарь — если захотите"
           }
         }
       }
     },
-    "retro.save" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add"
+    "onboarding.hotkeys.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reach Plyne from anywhere:"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Добавить"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plyne под рукой откуда угодно:"
           }
         }
       }
     },
-    "retro.save_anyway" : {
-      "comment" : "Confirm adding the session despite an overlap warning.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add anyway"
+    "onboarding.hotkeys.openDashboard": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the overview"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Всё равно добавить"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Открыть обзор"
           }
         }
       }
     },
-    "retro.title" : {
-      "comment" : "Header of the retroactive-entry form.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add a past session"
+    "onboarding.hotkeys.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keyboard shortcuts"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Прошедшая сессия"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сочетания клавиш"
           }
         }
       }
     },
-    "retro.when" : {
-      "comment" : "Label for the start date/time picker in the retroactive form.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Started"
+    "onboarding.hotkeys.toggleMode": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Switch timer mode"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Начало"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Переключить режим таймера"
           }
         }
       }
     },
-    "session.bell.title" : {
-      "comment" : "Shown when a Pomodoro reaches the end of its work phase.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The timer reached the end."
+    "onboarding.hotkeys.toggleSession": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start or stop a session"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Таймер дошёл до конца."
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запустить или остановить сессию"
           }
         }
       }
     },
-    "session.summary.intention %@ %@" : {
-      "comment" : "Post-session summary with an intention. %1 is a localized minutes phrase, %2 the intention text.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Session ended. %1$@, focus: %2$@"
+    "onboarding.intro.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plyne lives in your menu bar. Start a focus session, name what you're working on, and look back on your time whenever you like."
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Сессия завершена. %1$@, фокус: %2$@"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plyne живёт в строке меню. Запускайте сессию фокуса, называйте, над чем работаете, и смотрите своё время, когда захотите."
           }
         }
       }
     },
-    "session.summary.plain %@" : {
-      "comment" : "Post-session summary without an intention. %@ is a localized minutes phrase (e.g. \"25 minutes\").",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Session ended. %@."
+    "onboarding.intro.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A quiet focus timer"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Сессия завершена. %@."
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тихий таймер фокуса"
           }
         }
       }
     },
-    "timeline.empty" : {
-      "comment" : "Calm empty-state for a day with no sessions or events.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nothing recorded for this day."
+    "onboarding.next": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "За этот день ничего не записано."
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дальше"
           }
         }
       }
     },
-    "timeline.kind.calendar" : {
-      "comment" : "VoiceOver cue identifying a timeline row as a calendar event.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Calendar event"
+    "onboarding.reopen": {
+      "comment": "Popover footer affordance that re-opens the three-screen intro on demand (not only on first launch).",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome guide"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Событие календаря"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Знакомство"
           }
         }
       }
     },
-    "timeline.kind.session" : {
-      "comment" : "VoiceOver cue identifying a timeline row as a focus session.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Focus session"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Сессия фокуса"
+    "onboarding.progress %@ %@": {
+      "comment": "A label that announces the current step of the onboarding flow. The argument is the current step number, the second is the total number of steps.",
+      "isCommentAutoGenerated": true,
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "onboarding.progress %1$@ %2$@"
           }
         }
       }
     },
-    "timeline.session.inProgress" : {
-      "comment" : "Subtitle for the currently-running session.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In progress"
+    "onboarding.progress %lld %lld": {
+      "comment": "VoiceOver label for the onboarding progress dots. %1 is the current step, %2 the total.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Step %1$lld of %2$lld"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Идёт сейчас"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Шаг %1$lld из %2$lld"
           }
         }
       }
     },
-    "timeline.session.untitled" : {
-      "comment" : "Title for a focus session with no intention.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Focus session"
+    "onboarding.window.title": {
+      "comment": "Title of the first-run onboarding window.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Getting started"
           }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Сессия фокуса"
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Первые шаги"
+          }
+        }
+      }
+    },
+    "retro.add": {
+      "comment": "Idle-screen entry point to record a session that already happened.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add a past session"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить прошедшую сессию"
+          }
+        }
+      }
+    },
+    "retro.duration %lld": {
+      "comment": "Duration stepper value in the retroactive form. %lld is minutes; the unit stays abbreviated (min/мин) on purpose — a compact control value, not prose, so no plural agreement is needed.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld мин"
+          }
+        }
+      }
+    },
+    "retro.label.duration": {
+      "comment": "Row label in the retroactive form, left of the duration stepper.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duration"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Длительность"
+          }
+        }
+      }
+    },
+    "retro.label.mode": {
+      "comment": "Row label in the retroactive form, left of the mode picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Режим"
+          }
+        }
+      }
+    },
+    "retro.overlap": {
+      "comment": "Calm, non-blocking warning when a retroactive session overlaps already-recorded time.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This overlaps time you've already recorded."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Это пересекается с уже записанным временем."
+          }
+        }
+      }
+    },
+    "retro.save": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавить"
+          }
+        }
+      }
+    },
+    "retro.save_anyway": {
+      "comment": "Confirm adding the session despite an overlap warning.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add anyway"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Всё равно добавить"
+          }
+        }
+      }
+    },
+    "retro.title": {
+      "comment": "Header of the retroactive-entry form.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add a past session"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прошедшая сессия"
+          }
+        }
+      }
+    },
+    "retro.when": {
+      "comment": "Label for the start date/time picker in the retroactive form.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Started"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Начало"
+          }
+        }
+      }
+    },
+    "session.bell.title": {
+      "comment": "Shown when a Pomodoro reaches the end of its work phase.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The timer reached the end."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Таймер дошёл до конца."
+          }
+        }
+      }
+    },
+    "session.summary.intention %@ %@": {
+      "comment": "Post-session summary with an intention. %1 is a localized minutes phrase, %2 the intention text.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Session ended. %1$@, focus: %2$@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сессия завершена. %1$@, фокус: %2$@"
+          }
+        }
+      }
+    },
+    "session.summary.plain %@": {
+      "comment": "Post-session summary without an intention. %@ is a localized minutes phrase (e.g. \"25 minutes\").",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Session ended. %@."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сессия завершена. %@."
+          }
+        }
+      }
+    },
+    "timeline.empty": {
+      "comment": "Calm empty-state for a day with no sessions or events.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing recorded for this day."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "За этот день ничего не записано."
+          }
+        }
+      }
+    },
+    "timeline.kind.calendar": {
+      "comment": "VoiceOver cue identifying a timeline row as a calendar event.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calendar event"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Событие календаря"
+          }
+        }
+      }
+    },
+    "timeline.kind.session": {
+      "comment": "VoiceOver cue identifying a timeline row as a focus session.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Focus session"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сессия фокуса"
+          }
+        }
+      }
+    },
+    "timeline.session.inProgress": {
+      "comment": "Subtitle for the currently-running session.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In progress"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Идёт сейчас"
+          }
+        }
+      }
+    },
+    "timeline.session.untitled": {
+      "comment": "Title for a focus session with no intention.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Focus session"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сессия фокуса"
+          }
+        }
+      }
+    },
+    "timer.readout.elapsed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in focus"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "в фокусе"
+          }
+        }
+      }
+    },
+    "timer.readout.overflow": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "past the bell"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "после сигнала"
+          }
+        }
+      }
+    },
+    "timer.readout.remaining": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "remaining"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "осталось"
           }
         }
       }
     }
   },
-  "version" : "1.1"
+  "version": "1.1"
 }

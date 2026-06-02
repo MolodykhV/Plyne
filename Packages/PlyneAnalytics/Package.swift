@@ -1,11 +1,15 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 6.2
 import PackageDescription
 
-// Pure Swift package: heatmap aggregation, trends, insight-card rules.
-// Same Linux-buildable contract as PlyneCore — keep it free of Apple-only
-// frameworks so it stays cheap to test.
+// Pure Swift package: heatmap aggregation, trends, insight-card rules. Same
+// Linux-buildable contract as PlyneCore — free of Apple-only frameworks. The
+// macOS pin below only constrains Apple platforms (Linux is unaffected) and
+// matches the app so Release archives compile with Swift concurrency available.
 let package = Package(
     name: "PlyneAnalytics",
+    platforms: [
+        .macOS(.v26),
+    ],
     products: [
         .library(name: "PlyneAnalytics", targets: ["PlyneAnalytics"]),
     ],
